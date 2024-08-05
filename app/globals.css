@@ -1,27 +1,105 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
-    --background: 200 20% 98%;
-    --btn-background: 200 10% 91%;
-    --btn-background-hover: 200 10% 89%;
-    --foreground: 200 50% 3%;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --background: 200 50% 3%;
-      --btn-background: 200 10% 9%;
-      --btn-background-hover: 200 10% 12%;
-      --foreground: 200 20% 96%;
-    }
-  }
+/*-----Adam Demol 2024-----*/
+:root {
+  line-height: 1.5;
+  font-size: 16px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  --page-width: 1200px;
 }
 
-@layer base {
-  * {
-    @apply border-foreground/20;
-  }
+* { margin: 0px; padding: 0px; border: 0px; box-sizing: border-box; }
+*::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+button { cursor: pointer; }
+
+body {
+  background-color: #efefef;
+  color: #111;
+}
+
+h1 {
+  font-size: 2.4rem;
+}
+
+.nav-wrapper {
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  box-shadow: 0 5px 10px #ccc;
+}
+
+.navbar {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: auto minmax(200px, 400px) auto;
+  gap: 4rem;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--page-width);
+}
+
+.main-content {
+  display: grid;
+  justify-content: center;
+}
+
+.auth-btn {
+  display: flex;
+  align-items: center;
+  padding-inline: 1rem;
+  height: 40px;
+  color: #111;
+  border: 1px solid #111;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.auth-btn:hover {
+  background-color: #111;
+  color: white;
+}
+
+.auth-btn .login {
+
+}
+
+.auth-btn.logout {
+  margin: 0 auto;
+}
+
+.searchbar {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.search-btn {
+  background: none;
+  padding: 10px;
+}
+
+.search-btn:hover > svg {
+  color: rgb(204, 50, 50);
+}
+
+.search-label {
+  display: none;
+}
+
+.search-input {
+  padding: .5rem;
+  width: 100%;
+  background: none;
+}
+
+.user-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.recipe-img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
 }
