@@ -1,18 +1,17 @@
-import { createClient } from "@/utils/supabase/server";
 import AuthButton from "../components/AuthButton";
 import SearchBar from "./SearchBar";
+import Navigation from "./Navigation";
 
 export default async function Header() {
 
-
-
   return (
-    <div className="nav-wrapper">
-      <nav className="navbar">
+    <header className="header-span-page">
+      <div className="header-wrap">
         <h1>Just Recipes</h1>
         <SearchBar />
         <AuthButton />
-      </nav>
-    </div>
+        <Navigation />
+      </div>
+    </header>
   );
 }
