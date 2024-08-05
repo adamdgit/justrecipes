@@ -1,10 +1,10 @@
 import React from 'react'
 import { createClient } from '@/utils/supabase/server';
 
-export default async function Recipe({ search }: {search:string}){
+export default async function Recipe({ id }: { id: string }){
 
   const supabase = createClient();
-  const { data: recipes, error: recipeError } = await supabase.from("recipes").select("*").like("name", `%${search}%`);
+  const { data: recipes, error: recipeError } = await supabase.from("recipes").select("*").eq('id', Number(id));
 
   if (recipeError) return <p>Error: {recipeError.message}</p>
 
@@ -51,8 +51,8 @@ export default async function Recipe({ search }: {search:string}){
       {ingredients?.map(ingredient => {
         return <ul>
           <li>
-            {ingredient.amount} {ingredient.measurements.name === 'self' ? '' : ingredient.measurements.name}
-            {' ' + ingredient.ingredients.name}
+            {ingredient.amount} {ingredient?.measurements?.name === 'self' ? '' : ingredient?.measurements?.name}
+            {' ' + ingredient?.ingredients?.name}
           </li>
         </ul>
       })}
