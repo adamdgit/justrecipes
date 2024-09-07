@@ -54,7 +54,6 @@ input {
 .header-wrap {
   padding: 2rem;
   display: grid;
-  grid-template-columns: auto minmax(200px, 500px) auto;
   row-gap: 1rem;
   column-gap: 3rem;
   justify-content: space-between;

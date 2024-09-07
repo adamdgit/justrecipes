@@ -1,16 +1,23 @@
+import { createClient } from "@/utils/supabase/server";
 import AuthButton from "../components/AuthButton";
 import SearchBar from "./SearchBar";
-import Navigation from "./Navigation";
 
 export default async function Header() {
+  
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
   return (
     <header className="header-span-page">
-      <div className="header-wrap" title="home">
+      <div className="header-wrap" title="home" style={
+        user ? {'gridTemplateColumns': 'auto minmax(200px, 350px) auto auto'}
+        : {'gridTemplateColumns': 'auto minmax(200px, 450px) auto'}
+      }>
         <a href="/" className="brand-text">
           <span className="brand1">just</span> <span className="brand2">recipes</span>
         </a>
         <SearchBar />
+        {user ? <a href='/transcribe' className="generate-btn">Create Recipe</a> : null}
         <AuthButton />
       </div>
     </header>
