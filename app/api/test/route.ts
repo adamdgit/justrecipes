@@ -6,7 +6,6 @@ export async function GET(request: NextRequest) {
   const query = searchParams.get('query')
   console.log(query)
 
-
   const supabase = createClient();
   const { data: recipes, error: recipeError } = await supabase.from("recipes")
     .select("name")
@@ -14,6 +13,7 @@ export async function GET(request: NextRequest) {
 
   if (recipeError) return NextResponse.error();
 
+  console.log(recipes)
   // query is "hello" for /api/search?query=hello
   return NextResponse.json({res: recipes})
 }

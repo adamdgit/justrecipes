@@ -3,8 +3,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import React, { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 export default function SearchBar() {
+
+  // get search query after redirect to search page if it exists
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query");
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -12,7 +17,12 @@ export default function SearchBar() {
     <form method='post' action={`http://localhost:3000/search?query=${searchQuery}`}>
       <label className='search-label' htmlFor='searchbar'>Search</label>
       <span className='searchbar'>
-        <input className='search-input' name='searchbar' type='search' onChange={(e) => setSearchQuery(e.target.value)} />
+        <input className='search-input' 
+          placeholder='search existing recipes'
+          defaultValue={query ?? ''}
+          name='searchbar' 
+          type='search' 
+          onChange={(e) => setSearchQuery(e.target.value)} />
         <button className='search-btn' type='submit'>
           <FontAwesomeIcon icon={faSearch} style={{width: '20px'}} />
         </button>

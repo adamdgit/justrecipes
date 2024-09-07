@@ -25,7 +25,7 @@ export default function Login({
       return redirect("/login?message=Could not authenticate user");
     }
 
-    return redirect("/protected");
+    return redirect("/transcribe");
   };
 
   const signUp = async (formData: FormData) => {
@@ -53,7 +53,7 @@ export default function Login({
   };
 
   return (
-    <div className="">
+    <div className="content-wrap">
       <Link
         href="/"
         className=""
@@ -75,36 +75,36 @@ export default function Login({
         Back
       </Link>
 
-      <form className="">
-        <label className="text-md" htmlFor="email">
-          Email
-        </label>
-        <input
-          className=""
-          name="email"
-          placeholder="you@example.com"
-          required
-        />
-        <label className="text-md" htmlFor="password">
-          Password
-        </label>
-        <input
-          className=""
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        />
+      <h1>SignIn</h1>
+
+      <form className="login-form">
+          <label htmlFor="email">
+            Email
+          </label>
+          <input
+            className=""
+            name="email"
+            placeholder="you@example.com"
+            required
+          />
+          <label htmlFor="password">
+            Password
+          </label>
+          <input
+            type="password"
+            name="password"
+            placeholder="••••••••"
+            required
+          />
+
         <SubmitButton
           formAction={signIn}
-          className=""
           pendingText="Signing In..."
         >
           Sign In
         </SubmitButton>
         <SubmitButton
           formAction={signUp}
-          className=""
           pendingText="Signing Up..."
         >
           Sign Up

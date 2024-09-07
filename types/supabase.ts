@@ -9,7 +9,25 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      diet_restrictions: {
+      category: {
+        Row: {
+          created_at: string
+          id: number
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string | null
+        }
+        Relationships: []
+      }
+      dietary_flags: {
         Row: {
           created_at: string
           id: number
@@ -51,7 +69,7 @@ export type Database = {
             foreignKeyName: "dietary_flags_bt_dietary_ID_fkey"
             columns: ["dietary_ID"]
             isOneToOne: false
-            referencedRelation: "diet_restrictions"
+            referencedRelation: "dietary_flags"
             referencedColumns: ["id"]
           },
           {
@@ -63,93 +81,35 @@ export type Database = {
           },
         ]
       }
-      ingredients: {
+      recipe_categories_bt: {
         Row: {
-          brand: string | null
-          calories: number | null
+          category_ID: number | null
           created_at: string
           id: number
-          name: string | null
-        }
-        Insert: {
-          brand?: string | null
-          calories?: number | null
-          created_at?: string
-          id?: number
-          name?: string | null
-        }
-        Update: {
-          brand?: string | null
-          calories?: number | null
-          created_at?: string
-          id?: number
-          name?: string | null
-        }
-        Relationships: []
-      }
-      measurements: {
-        Row: {
-          created_at: string
-          id: number
-          is_metric: boolean | null
-          name: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          is_metric?: boolean | null
-          name?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          is_metric?: boolean | null
-          name?: string | null
-        }
-        Relationships: []
-      }
-      recipe_ingredients_bt: {
-        Row: {
-          amount: number | null
-          created_at: string
-          id: number
-          ingredient_ID: number | null
-          measurement_ID: number | null
           recipe_ID: number | null
         }
         Insert: {
-          amount?: number | null
+          category_ID?: number | null
           created_at?: string
           id?: number
-          ingredient_ID?: number | null
-          measurement_ID?: number | null
           recipe_ID?: number | null
         }
         Update: {
-          amount?: number | null
+          category_ID?: number | null
           created_at?: string
           id?: number
-          ingredient_ID?: number | null
-          measurement_ID?: number | null
           recipe_ID?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "recipe_ingredients_bt_ingredient_ID_fkey"
-            columns: ["ingredient_ID"]
+            foreignKeyName: "recipe_categories_bt_category_ID_fkey"
+            columns: ["category_ID"]
             isOneToOne: false
-            referencedRelation: "ingredients"
+            referencedRelation: "category"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "recipe_ingredients_bt_measurement_ID_fkey"
-            columns: ["measurement_ID"]
-            isOneToOne: false
-            referencedRelation: "measurements"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "recipe_ingredients_bt_recipe_ID_fkey"
+            foreignKeyName: "recipe_categories_bt_recipe_ID_fkey"
             columns: ["recipe_ID"]
             isOneToOne: false
             referencedRelation: "recipes"
@@ -162,37 +122,40 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: number
+          ingredients: string | null
           instructions: string | null
           name: string | null
           preview_img_url: string | null
-          rating: number | null
           serves: string | null
           shorts_url: string | null
           time_minutes: number | null
+          rating: number | null
         }
         Insert: {
           created_at?: string | null
           description?: string | null
           id?: number
+          ingredients?: string | null
           instructions?: string | null
           name?: string | null
           preview_img_url?: string | null
-          rating?: number | null
           serves?: string | null
           shorts_url?: string | null
           time_minutes?: number | null
+          rating: number | null
         }
         Update: {
           created_at?: string | null
           description?: string | null
           id?: number
+          ingredients?: string | null
           instructions?: string | null
           name?: string | null
           preview_img_url?: string | null
-          rating?: number | null
           serves?: string | null
           shorts_url?: string | null
           time_minutes?: number | null
+          rating: number | null
         }
         Relationships: []
       }
@@ -293,11 +256,3 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
     : never
-   
-// database tables types     
-export type recipe = Database['public']['Tables']['recipes']['Row'];
-export type recipe_ingredients_bt = Database['public']['Tables']['recipe_ingredients_bt']['Row'];
-export type ingredients = Database['public']['Tables']['ingredients']['Row'];
-export type measurements = Database['public']['Tables']['measurements']['Row'];
-export type diet_restrictions = Database['public']['Tables']['diet_restrictions']['Row'];
-export type dietary_flags_bt = Database['public']['Tables']['dietary_flags_bt']['Row'];

@@ -6,11 +6,12 @@ export default async function Header() {
 
   return (
     <header className="header-span-page">
-      <div className="header-wrap">
-        <h1>Just Recipes</h1>
+      <div className="header-wrap" title="home">
+        <a href="/" className="brand-text">
+          <span className="brand1">just</span> <span className="brand2">recipes</span>
+        </a>
         <SearchBar />
         <AuthButton />
-        <Navigation />
       </div>
     </header>
   );
