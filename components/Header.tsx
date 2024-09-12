@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import AuthButton from "../components/AuthButton";
 import SearchBar from "./SearchBar";
+import Navbar from "./Navbar";
 
 export default async function Header() {
   
@@ -17,7 +18,9 @@ export default async function Header() {
           <span className="brand1">just</span> <span className="brand2">recipes</span>
         </a>
         <SearchBar />
-        {user ? <a href='/transcribe' className="generate-btn">Create Recipe</a> : null}
+        {user ? 
+          <Navbar />
+          : null}
         <AuthButton />
       </div>
     </header>
