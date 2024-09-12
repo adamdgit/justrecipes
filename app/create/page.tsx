@@ -1,3 +1,4 @@
+import Helper from "@/components/Helper";
 import Transcribe from "@/components/Transcribe";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -15,14 +16,9 @@ export default async function ProtectedPage() {
 
   return (
     <div className='content-wrap'>
-      <h2>Generate recipe from video using AI</h2>
+      <h1>Generate recipe from video using AI</h1>
       <p><strong>Supports:</strong> Youtube videos and shorts</p>
-      <ol>
-        <li>Click "share" on your Youtube video</li>
-        <li>Copy the video URL</li>
-        <li>Paste the URL in the box below</li>
-        <li>Click Generate</li>
-      </ol>
+      <Helper />
       <Transcribe />
     </div>
   );
