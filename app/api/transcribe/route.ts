@@ -3,6 +3,8 @@ import { YoutubeTranscript } from "youtube-transcript";
 import OpenAI from "openai";
 import { NextApiRequest, NextApiResponse } from 'next';
 import { isValidURL } from '@/utils/isValidURL';
+import { getIDfromURL } from '@/utils/getIDfromURL';
+import { createClient } from '@/utils/supabase/server';
 
 export async function POST(request: NextRequest, res: NextApiResponse) {
   // get query string from url
@@ -11,18 +13,26 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
   const language = searchParams.get('lang') ?? "en";
 
   // handle invalid urls
-  if (isValidURL(url)) {
-    return NextResponse.json({ message: "Invalid URL provided", status: 400 });
+  if (!isValidURL(url)) {
+    return new Response(null, { statusText: "Invalid URL provided", status: 400 });
   }
 
-  // get ID from youtube url, needed for transcript function
-  const URL_ID = url.split("/shorts/")[1]
-  console.log(URL_ID)
+  const URL_ID = getIDfromURL(url);
+
+  // If video ID has already been transcribed return an error, frontend can link to the video
+  const supabase = createClient();
+  const { data, error } = await supabase.from("recipes")
+    .select("shorts_url")
+    .eq("shorts_url", URL_ID)
+  
+  if (data && data[0]?.shorts_url === URL_ID) {
+    return new Response(URL_ID, { statusText: "Transcription for video already exists", status: 409 });
+  }
 
   try {
     const transcript = await YoutubeTranscript.fetchTranscript(URL_ID);
     // retuns only text values from transcript object
-    const formattedTranscript = transcript.map(obj => obj.text);
+    const formattedTranscript = transcript.map(obj => obj.text).join('');
     console.log(formattedTranscript)
 
     // result is a readable stream
@@ -36,13 +46,13 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
     });
   } catch(error) {
     console.log(error)
-    return NextResponse.json({}, {status: 400, statusText: "Youtube transcription not available"})
+    return new Response(null, { statusText: "Sorry, transcript was not available for this video", status: 400 });
   }
 }
 
 
 // create openai GPT assistant and return readable stream
-async function createGPTAssistant(transcript: string[]) {
+async function createGPTAssistant(transcript: string) {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY});
   const assistant = await openai.beta.assistants.retrieve("asst_B8t5h5HvPicELSNljrmD4Oi4");
 
@@ -52,7 +62,7 @@ async function createGPTAssistant(transcript: string[]) {
       messages: [
         {
           role: "user",
-          content: `Can you provide the recipe, ingredients, and measurements for the given audio transcription of this recipe: ${transcript.toString()}`
+          content: `Can you provide the recipe, ingredients with measurements and instructions for the given audio transcription of this recipe: ${transcript}`
         }
       ],
     },
