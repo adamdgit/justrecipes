@@ -1,5 +1,6 @@
 import { Database } from '@/types/supabase';
 import React from 'react'
+import Rating from './Rating';
 
 type Recipe = Database["public"]["Tables"]["recipes"]["Row"];
 type ResultsProps = {
@@ -10,14 +11,16 @@ export default async function Results({ data } : ResultsProps) {
 
   return (
     <div className='results-list'>
-    {data?.map(recipe => 
-      <a href={`http://localhost:3000/recipes/${recipe.id}`} className='result-link'>
+    {data && data?.map(recipe => 
+      <a href={`http://localhost:3000/recipes/${recipe.id}`} 
+        key={recipe.id}
+        className='result-link'>
         <img src={recipe.preview_img_url ?? ''} alt={recipe.name + ' preview image'} className='recipe-img' />
-        <h2>{recipe.name}</h2>
         <div className='result-text'>
+          <h3>{recipe.name}</h3>
           <p>{recipe.description}</p>
-          <p>Rating: {recipe.rating}</p>
-          <p>Serves: {recipe.serves}</p>
+          <p>Cooking Time: {recipe.cooking_time}</p>
+          <Rating rating={recipe.rating ?? 0} />
         </div>
       </a>)}
     </div>
