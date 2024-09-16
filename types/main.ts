@@ -1,6 +1,6 @@
 export type ErrorMsg = {
-  status: number,
-  msg: string
+  status: number | null,
+  msg: string | null
 }
 
 export type AssistantResponse = {
