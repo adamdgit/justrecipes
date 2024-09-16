@@ -3,13 +3,17 @@
 import React, { useState } from "react";
 import { parse, Allow } from "partial-json";
 import type { ErrorMsg, AssistantResponse } from "@/types/main";
+import ErrorMessage from "./ErrorMessage";
 
 export default function Transcribe() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<AssistantResponse>();
-  const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<ErrorMsg | undefined>();
+  const [streamedData, setStreamedData] = useState<AssistantResponse>();
+  const [errorMsg, setErrorMsg] = useState<ErrorMsg>({msg: null, status: null});
+  const [streamingIsDone, setStreamingIsDone] = useState(false);
+
+  const [saved, setSaved] = useState(false);
+  const [savedID, setSavedID] = useState();
 
   async function handleStreaming(reader: ReadableStreamDefaultReader<Uint8Array>, decoder: TextDecoder) {
     let tmp = ''
@@ -25,18 +29,21 @@ export default function Transcribe() {
 
       // transcript is availalbe, but video is not a recipe
       if (parsedJSON?.success === false) {
-        setError(true);
         setErrorMsg({status: 400, msg: "No recipe found in video"});
         return
       }
 
-      setData(parsedJSON)
+      setStreamedData(parsedJSON)
     }
   }
 
   async function fetchRecipeTranscription() {
+    // reset state each run
+    setSaved(false);
+    setSavedID(undefined);
     setLoading(true);
-    setError(false);
+    setStreamingIsDone(false);
+    setErrorMsg({msg: null, status: null});
     
     const response = await fetch(`http://localhost:3000/api/transcribe?url=${url}`, {
       method: "POST",
@@ -50,21 +57,31 @@ export default function Transcribe() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       await handleStreaming(reader, decoder);
+      setStreamingIsDone(true);
     } else {
       setLoading(false);
-      setError(true);
-      setErrorMsg({status: response.status, msg: response.statusText});
+      setErrorMsg({msg: response.statusText, status: response.status});
     }
   }
 
-  async function saveRecipe() {
+  async function createRecipe() {
     const response = await fetch(`http://localhost:3000/api/recipe/create`, {
       method: "POST",
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({...data, "shorts_url": url})
+      body: JSON.stringify({...streamedData, "shorts_url": url})
     });
+
+    if (!response.ok) {
+      // handle error
+    }
+
+    // if successful get newly created items ID
+    setSaved(true);
+    const res = await response.json();
+    setSavedID(res.item_id);
+
   }
 
   return (
@@ -81,28 +98,36 @@ export default function Transcribe() {
 
       {loading && <p>Connecting to AI assistant..</p>}
 
-      {error ?  
-        <p>{errorMsg?.msg}</p>
-      : data?.recipe &&
+      {errorMsg.status ?  
+        <ErrorMessage msg={errorMsg?.msg} />
+      : streamedData?.recipe && !saved &&
         <div className={"streamed-content"}>
-          <h3>Name: {data?.recipe.name}</h3>
-          <p><strong>Description: </strong> {data?.recipe.description}</p>
-          <p><strong>Cooking Time: </strong>{data?.recipe.cooking_time}</p>
+          <h3>Name: {streamedData?.recipe.name}</h3>
+          <p><strong>Description: </strong> {streamedData?.recipe.description}</p>
+          <p><strong>Cooking Time: </strong>{streamedData?.recipe.cooking_time}</p>
           <strong>Tags</strong>
           <ul style={{display: 'flex', gap: "1rem"}}>
-            {data?.recipe.tags?.map((tag, i) => <li key={i}>{tag}</li>)}
+            {streamedData?.recipe.tags?.map((tag, i) => <li key={i}>{tag}</li>)}
           </ul>
           <strong>Ingredients</strong>
           <ul>
-            {data?.recipe.ingredients?.map((ingr, i) => <li key={i}>{ingr}</li>)}
+            {streamedData?.recipe.ingredients?.map((ingr, i) => <li key={i}>{ingr}</li>)}
           </ul>
           <strong>Instructions</strong>
           <ol>
-            {data?.recipe.instructions?.map((inst, i) => <li key={i}>{inst}</li>)}
+            {streamedData?.recipe.instructions?.map((inst, i) => <li key={i}>{inst}</li>)}
           </ol>
 
-          <button onClick={() => saveRecipe()}>Save Recipe</button>
+          {streamingIsDone ? <button onClick={() => createRecipe()}>Save Recipe</button> : null}
         </div>}
+
+        {/* TODO CLEAN UP THIS SECTION */}
+        {saved ? 
+          <div style={{"display": "flex", "gap" : "1rem"}}>
+            <p>Recipe has been saved, view it here: </p>
+            <a href={`http://localhost:3000/recipes/${savedID}`} className="">View Created Item</a>
+          </div>
+        : null}
 
     </div>
   )
