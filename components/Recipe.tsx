@@ -4,31 +4,49 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 import Rating from './Rating';
 import SaveRecipe from './SaveRecipe';
+import ErrorMessage from './ErrorMessage';
 
 export default async function Recipe({ id }: { id: string }){
-
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const { data, error: recipeError } = await supabase.from("recipes")
+  const { data, error } = await supabase.from("recipes")
     .select("*")
     .eq('id', Number(id));
 
-  if (recipeError) return <p>Error: {recipeError.message}</p>
+  if (error) return <ErrorMessage msg={"Error fetching recipe info"} />
 
   // always returns 1 result in an array as we are selecting by unique ID
   const recipe = data[0];
+
+  let isSaved = false;
+  // check if recipe is saved or not for user, if logged in
+  if (user) {
+    const { data: savedRecipe, error: savedError } = await supabase.from('user_saved_recipes')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('recipe_id', Number(id)); 
+
+    // if a result returns the recipe has been saved by user
+    if (savedRecipe && savedRecipe?.length > 0) {
+      isSaved = true;
+    }
+  }
 
   return (
     <React.Fragment>
       <div className='recipe-like'>
         <h2>{recipe.name}</h2>
-        <SaveRecipe id={id} user_ID={user?.id ?? ""} />
+        {user && <SaveRecipe id={id} user_ID={user?.id ?? null} isSaved={isSaved} />}
       </div>
 
       <div className='recipe-full'>
         <div className='recipe-left-half'>
-          <Rating rating={recipe.rating ?? 0} /> 
+          <Rating 
+            user_id={user?.id ?? null}
+            rating={recipe.rating ?? 0} 
+            count={recipe.rating_count ?? 0} 
+          /> 
           <span className='cooking-time'>
             Cooking Time: 
             <FontAwesomeIcon icon={faClock} width={20} height={20} />
