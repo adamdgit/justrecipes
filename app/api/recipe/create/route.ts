@@ -31,6 +31,7 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
         cooking_time: body.recipe.cooking_time,
       }
     ])
+    .select()
   
   console.log(error)
   console.log(data)
@@ -38,7 +39,10 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
   if (error) {
     return new Response(null, { statusText: error.message, status: 401 });
   }
+
+  // return item ID to use on frontend for displaying link to the newly added item
+  const item_id = data[0].id;
     
   // handle invalid urls
-  return new Response(null, { statusText: "Recipe created successfully", status: 200 });
+  return new Response(JSON.stringify({"item_id": item_id}), { statusText: "Recipe created successfully", status: 200 });
 }
