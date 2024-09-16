@@ -20,7 +20,11 @@ export default async function Results({ data } : ResultsProps) {
           <h3>{recipe.name}</h3>
           <p>{recipe.description}</p>
           <p>Cooking Time: {recipe.cooking_time}</p>
-          <Rating rating={recipe.rating ?? 0} />
+          <Rating 
+            user_id={null}
+            rating={recipe.rating ?? 0} 
+            count={recipe.rating_count ?? 0} 
+          />
         </div>
       </a>)}
     </div>
