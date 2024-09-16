@@ -7,6 +7,7 @@
   --color1: rgb(233, 63, 119);
   --color2: #212022;
   --shadow: 0 5px 10px 0 #111;
+  --border: 1px solid #555;
 }
 
 * { margin: 0px; padding: 0px; border: 0px; box-sizing: border-box; }
@@ -48,7 +49,7 @@ input {
   display: flex;
   justify-content: center;
   background-color: var(--color2);
-  border-bottom: 1px solid #555;
+  border-bottom: var(--border);
 }
 
 .header-wrap {
@@ -92,21 +93,30 @@ input {
   gap: 10px;
 }
 
+.save-btn {
+  background: unset;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  cursor: pointer;
+  height: 20px;
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+.save-btn svg {  transition: all 150ms ease-in-out; }
+.save-btn:hover > svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color1);
+}
+.save-btn:hover {
+  color: var(--color1);
+}
+
 .recipe-like {
   display: flex;
   gap: 1rem;
   align-items: center;
-}
-
-.recipe-like svg { 
-  cursor: pointer;
-  transition: all 150ms ease-in-out;
-}
-
-.recipe-like svg:hover {
-  width: 20px;
-  height: 20px;
-  color: var(--color1);
 }
 
 .rating-stars {
@@ -117,6 +127,18 @@ input {
 .stars {
   display: flex;
   gap: 3px;
+  align-items: center;
+}
+
+.rating-modal {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: var(--color2);
+  border: var(--border);
+  padding: 1rem;
+  margin-block: 1rem;
+  width: fit-content;
 }
 
 .cooking-time {
@@ -129,20 +151,19 @@ input {
   display: grid;
 }
 
-.ingredients-list {
+.instructions-list, .ingredients-list {
+  display: grid;
+  gap: .3rem;
   padding: 1rem;
   background-color: var(--color2);
-  list-style-position: inside;
-}
-
-.instructions-list {
-  padding: 1rem;
-  background-color: var(--color2);
+  border: var(--border);
+  box-shadow: var(--shadow);
   list-style-position: inside;
 }
 
 .heading-small {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  padding-block: .5rem;
 }
 
 .helper-wrap {
@@ -152,7 +173,7 @@ input {
   gap: 2rem;
   background: var(--color2);
   padding: 2rem;
-  border: 1px solid #555;
+  border: var(--border);
   box-shadow: var(--shadow);
   transition: all 300ms ease-in-out;
 }
@@ -200,7 +221,7 @@ input {
 }
 .login-form button {
   padding: 1rem;
-  border: 1px solid #555;
+  border: var(--border);
   border-radius: 5px;
   text-decoration: none;
   background: var(--color2);
@@ -208,18 +229,18 @@ input {
 }
 .login-form button:hover { background: var(--color1); }
 
-.auth-btn, .generate-btn {
+.auth-btn, .generate-btn, .btn {
   display: flex;
   align-items: center;
   padding: .5rem .8rem;
-  border: 1px solid #555;
+  border: var(--border);
   border-radius: 5px;
   text-decoration: none;
   background: var(--color2);
   color: white;
 }
 
-.auth-btn:hover, .generate-btn:hover {
+.auth-btn:hover, .generate-btn:hover, .btn:hover {
   background-color: var(--color1);
   color: white;
 }
@@ -236,7 +257,7 @@ input {
 .searchbar {
   display: flex;
   box-shadow: inset var(--shadow);
-  border: 1px solid #555;
+  border: var(--border);
   width: 100%;
   border-radius: 10px; 
 }
@@ -319,7 +340,7 @@ input {
 .url-wrap input {
   padding: 10px;
   width: 100%;
-  border: 1px solid #555;
+  border: var(--border);
   background-color: var(--color2);
   box-shadow: inset var(--shadow);
   border-radius: 10px; 
