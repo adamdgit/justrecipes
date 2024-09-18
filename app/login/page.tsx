@@ -45,7 +45,6 @@ export default function Login({
     });
 
     if (error) {
-      console.log(error)
       return redirect("/login?message=Could not authenticate user");
     }
 
@@ -54,10 +53,7 @@ export default function Login({
 
   return (
     <div className="content-wrap">
-      <Link
-        href="/"
-        className=""
-      >
+      <Link href="/" className="btn back-btn">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
