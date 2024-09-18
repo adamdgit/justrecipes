@@ -10,26 +10,36 @@ export default async function Recipe({ id }: { id: string }){
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const { data, error } = await supabase.from("recipes")
+  const { data: recipe, error } = await supabase.from("recipes")
     .select("*")
-    .eq('id', Number(id));
+    .eq('id', Number(id))
+    .single();
 
   if (error) return <ErrorMessage msg={"Error fetching recipe info"} />
 
-  // always returns 1 result in an array as we are selecting by unique ID
-  const recipe = data[0];
-
   let isSaved = false;
+  let userRating = 0;
   // check if recipe is saved or not for user, if logged in
   if (user) {
     const { data: savedRecipe, error: savedError } = await supabase.from('user_saved_recipes')
-      .select('*')
+      .select(`*`)
       .eq('user_id', user.id)
-      .eq('recipe_id', Number(id)); 
+      .eq('recipe_id', Number(id))
+      .single();
 
     // if a result returns the recipe has been saved by user
-    if (savedRecipe && savedRecipe?.length > 0) {
+    if (savedRecipe) {
       isSaved = true;
+    }
+
+    const { data: savedRating, error: ratingError } = await supabase.from('ratings_tracking')
+      .select(`*`)
+      .eq('user_ID', user.id)
+      .eq('recipe_ID', Number(id))
+      .single();
+
+    if (savedRating) {
+      userRating = savedRating.rating ?? 0;
     }
   }
 
@@ -45,7 +55,9 @@ export default async function Recipe({ id }: { id: string }){
           <Rating 
             user_id={user?.id ?? null}
             rating={recipe.rating ?? 0} 
+            user_rating={userRating}
             count={recipe.rating_count ?? 0} 
+            recipe_id={recipe.id}
           /> 
           <span className='cooking-time'>
             Cooking Time: 
@@ -53,6 +65,7 @@ export default async function Recipe({ id }: { id: string }){
             {recipe.cooking_time}
           </span>
           <span>{recipe.description}</span>
+          <span>Categories: </span>
 
           <span className='heading-small'>Ingredients: </span>
           <ul className='ingredients-list'>
@@ -70,7 +83,7 @@ export default async function Recipe({ id }: { id: string }){
         </div>
 
         <div className='recipe-right-half'>
-          <iframe width="320" height="640" src={`https://www.youtube.com/embed/${recipe?.shorts_url}` ?? 'no video found'} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          <iframe width="320" height="640" src={`https://www.youtube.com/embed/${recipe?.video_id}` ?? 'no video found'} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
         </div>
       </div>
     </React.Fragment>
