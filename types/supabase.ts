@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      dietary_flags: {
+      categories: {
         Row: {
           created_at: string
           id: number
@@ -26,42 +26,6 @@ export type Database = {
           name?: string | null
         }
         Relationships: []
-      }
-      dietary_flags_bt: {
-        Row: {
-          created_at: string
-          dietary_ID: number | null
-          id: number
-          recipe_ID: number | null
-        }
-        Insert: {
-          created_at?: string
-          dietary_ID?: number | null
-          id?: number
-          recipe_ID?: number | null
-        }
-        Update: {
-          created_at?: string
-          dietary_ID?: number | null
-          id?: number
-          recipe_ID?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "dietary_flags_bt_dietary_ID_fkey"
-            columns: ["dietary_ID"]
-            isOneToOne: false
-            referencedRelation: "dietary_flags"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "dietary_flags_bt_recipe_ID_fkey"
-            columns: ["recipe_ID"]
-            isOneToOne: false
-            referencedRelation: "recipes"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       ratings_tracking: {
         Row: {
@@ -95,38 +59,38 @@ export type Database = {
           },
         ]
       }
-      Recipe_tags: {
+      recipe_categories: {
         Row: {
+          category_id: number | null
           created_at: string
           id: number
           recipe_id: number | null
-          tag_id: number | null
         }
         Insert: {
+          category_id?: number | null
           created_at?: string
           id?: number
           recipe_id?: number | null
-          tag_id?: number | null
         }
         Update: {
+          category_id?: number | null
           created_at?: string
           id?: number
           recipe_id?: number | null
-          tag_id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "Recipe_tags_recipe_id_fkey"
-            columns: ["recipe_id"]
+            foreignKeyName: "recipe_categories_category_id_fkey"
+            columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: "recipes"
+            referencedRelation: "categories"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "Recipe_tags_tag_id_fkey"
-            columns: ["tag_id"]
+            foreignKeyName: "recipe_categories_recipe_id_fkey"
+            columns: ["recipe_id"]
             isOneToOne: false
-            referencedRelation: "Tags"
+            referencedRelation: "recipes"
             referencedColumns: ["id"]
           },
         ]
@@ -140,11 +104,10 @@ export type Database = {
           ingredients: string | null
           instructions: string | null
           name: string | null
-          preview_img_url: string | null
           rating: number | null
           rating_count: number | null
           serves: string | null
-          shorts_url: string | null
+          video_id: string | null
         }
         Insert: {
           cooking_time?: string | null
@@ -154,11 +117,10 @@ export type Database = {
           ingredients?: string | null
           instructions?: string | null
           name?: string | null
-          preview_img_url?: string | null
           rating?: number | null
           rating_count?: number | null
           serves?: string | null
-          shorts_url?: string | null
+          video_id?: string | null
         }
         Update: {
           cooking_time?: string | null
@@ -168,29 +130,10 @@ export type Database = {
           ingredients?: string | null
           instructions?: string | null
           name?: string | null
-          preview_img_url?: string | null
           rating?: number | null
           rating_count?: number | null
           serves?: string | null
-          shorts_url?: string | null
-        }
-        Relationships: []
-      }
-      Tags: {
-        Row: {
-          created_at: string
-          id: number
-          name: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          name?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          name?: string | null
+          video_id?: string | null
         }
         Relationships: []
       }
