@@ -19,7 +19,7 @@ export default async function AuthButton() {
     <div className="user-wrapper">
       {user.email}
       <form action={signOut}>
-        <button className="auth-btn logout">
+        <button className="btn logout">
           Logout
         </button>
       </form>
@@ -27,7 +27,7 @@ export default async function AuthButton() {
   ) : (
     <Link
       href="/login"
-      className="auth-btn login"
+      className="btn login"
     >
       Login
     </Link>
