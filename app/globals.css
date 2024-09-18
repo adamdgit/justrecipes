@@ -4,10 +4,11 @@
   font-size: 16px;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   --page-width: 1150px;
-  --color1: rgb(233, 63, 119);
+  --color1: #e93f77;
   --color2: #212022;
-  --shadow: 0 5px 10px 0 #111;
-  --border: 1px solid #555;
+  --color3: #1a181a;
+  --shadow: 0 5px 10px 0 #000;
+  --border: 1px solid #444;
 }
 
 * { margin: 0px; padding: 0px; border: 0px; box-sizing: border-box; }
@@ -16,13 +17,15 @@ html { scroll-behavior: smooth; }
 button { cursor: pointer; }
 
 body {
-  background-color: #302e30;
+  background-color: var(--color2);
   color: #fff;
+  /* Background from: https://bgjar.com/icon-grid */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='800' height='800' preserveAspectRatio='none' viewBox='0 0 800 800'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1768%26quot%3b)' fill='none'%3e%3crect width='800' height='800' x='0' y='0' fill='rgba(37%2c 36%2c 37%2c 1)'%3e%3c/rect%3e%3cuse xlink:href='%23SvgjsG1770' transform='translate(100%2c 200) scale(2)' fill='rgba(59%2c 56%2c 59%2c 1)'%3e%3c/use%3e%3cuse xlink:href='%23SvgjsG1770' transform='translate(500%2c 600) scale(2.5)' fill='rgba(59%2c 56%2c 59%2c 1)'%3e%3c/use%3e%3cuse xlink:href='%23SvgjsG1770' transform='translate(700%2c 300) scale(1.8)' fill='rgba(59%2c 56%2c 59%2c 1)'%3e%3c/use%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1768'%3e%3crect width='800' height='800' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cg id='SvgjsG1769'%3e%3cpath d='M15.964 4.774l-1.312 10.327H10.223L8.916 4.774h5.408L15.395 1.04 16 1.21l-1.024 3.562 0.988 0.002zM8.29 10.788s0.166-1.502-2.131-1.502H2.5c-2.293 0-2.131 1.502-2.132 1.502h7.922zM0.368 13.595s-0.162 1.506 2.132 1.506h3.659c2.297 0 2.131-1.506 2.131-1.506H0.369z m7.578-0.727a0.68 0.68 0 0 0 0.68-0.68c0-0.372-0.304-0.676-0.68-0.676H0.68C0.306 11.512 0 11.816 0 12.188a0.682 0.682 0 0 0 0.68 0.68h7.266z'%3e%3c/path%3e%3c/g%3e%3cg id='SvgjsG1770'%3e%3cuse xlink:href='%23SvgjsG1769' fill='rgba(59%2c 56%2c 59%2c 1)'%3e%3c/use%3e%3c/g%3e%3c/defs%3e%3c/svg%3e");
 }
 
 h1 { font-size: 2rem; }
 h2 { font-size: 1.5rem; }
-h3 { font-size: 1.2rem; }
+h3 { font-size: 1.2rem; color: white;}
 
 a { color: white; text-decoration: none;}
 a:hover { color: var(--color1); }
@@ -48,7 +51,7 @@ input {
 .header-span-page {
   display: flex;
   justify-content: center;
-  background-color: var(--color2);
+  background-color: var(--color3);
   border-bottom: var(--border);
 }
 
@@ -154,7 +157,7 @@ input {
 .instructions-list, .ingredients-list {
   display: grid;
   gap: .3rem;
-  padding: 1rem;
+  padding: 1.4rem;
   background-color: var(--color2);
   border: var(--border);
   box-shadow: var(--shadow);
@@ -229,7 +232,7 @@ input {
 }
 .login-form button:hover { background: var(--color1); }
 
-.auth-btn, .generate-btn, .btn {
+.btn {
   display: flex;
   align-items: center;
   padding: .5rem .8rem;
@@ -240,17 +243,13 @@ input {
   color: white;
 }
 
-.auth-btn:hover, .generate-btn:hover, .btn:hover {
+.btn:hover {
   background-color: var(--color1);
   color: white;
 }
 
-.auth-btn .login {
-
-}
-
-.auth-btn.logout {
-  margin: 0 auto;
+.back-btn {
+  width: fit-content;
 }
 
 /* Search bar & results */
@@ -316,6 +315,7 @@ input {
   justify-items: center;
   gap: .6rem;
   padding: 0 1rem 1rem 1rem;
+  color: #ccc;
 }
 
 .recipe-img {
@@ -335,6 +335,8 @@ input {
   padding: 2rem;
   border-radius: 5px;
   background: var(--color2);
+  border: var(--border);
+  box-shadow: var(--shadow);
 }
 
 .url-wrap input {
