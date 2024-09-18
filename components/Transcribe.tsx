@@ -70,7 +70,7 @@ export default function Transcribe() {
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({...streamedData, "shorts_url": url})
+      body: JSON.stringify({...streamedData, "video_url": url})
     });
 
     if (!response.ok) {
@@ -93,7 +93,7 @@ export default function Transcribe() {
           placeholder="example: https://www.youtube.com/shorts/[video-id]" 
           onChange={(e) => setUrl(e.target.value)}
         />
-        <button className="generate-btn" onClick={() => fetchRecipeTranscription()}>Generate</button>
+        <button className="btn" onClick={() => fetchRecipeTranscription()}>Generate</button>
       </div>
 
       {loading && <p>Connecting to AI assistant..</p>}
@@ -105,9 +105,9 @@ export default function Transcribe() {
           <h3>Name: {streamedData?.recipe.name}</h3>
           <p><strong>Description: </strong> {streamedData?.recipe.description}</p>
           <p><strong>Cooking Time: </strong>{streamedData?.recipe.cooking_time}</p>
-          <strong>Tags</strong>
+          <strong>Categories: </strong>
           <ul style={{display: 'flex', gap: "1rem"}}>
-            {streamedData?.recipe.tags?.map((tag, i) => <li key={i}>{tag}</li>)}
+            {streamedData?.recipe.categories?.map((cat, i) => <li key={i}>{cat}</li>)}
           </ul>
           <strong>Ingredients</strong>
           <ul>
