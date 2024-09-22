@@ -9,10 +9,6 @@ type ResultsProps = {
 
 export default function Results({ data } : ResultsProps) {
 
-  if (data?.length === 0) return (
-    <p>You have no saved recipes</p>
-  )
-
   return (
     <div className='results-list'>
     {data && data?.map(recipe => 
