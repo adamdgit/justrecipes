@@ -85,7 +85,7 @@ export default function Transcribe() {
   }
 
   return (
-    <div className="content-wrap">
+    <React.Fragment>
       <div className="url-wrap">
         <label htmlFor="url">Paste URL here:</label>
         <input name="url" 
@@ -118,7 +118,9 @@ export default function Transcribe() {
             {streamedData?.recipe.instructions?.map((inst, i) => <li key={i}>{inst}</li>)}
           </ol>
 
-          {streamingIsDone ? <button onClick={() => createRecipe()}>Save Recipe</button> : null}
+          {streamingIsDone ? 
+            <button onClick={() => createRecipe()} className="btn" style={{justifySelf: "center"}}>Save Recipe</button> 
+          : null}
         </div>}
 
         {/* TODO CLEAN UP THIS SECTION */}
@@ -129,6 +131,6 @@ export default function Transcribe() {
           </div>
         : null}
 
-    </div>
+    </React.Fragment>
   )
 }
