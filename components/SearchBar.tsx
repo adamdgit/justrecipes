@@ -14,7 +14,8 @@ export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <form method='post' action={`http://localhost:3000/search?query=${searchQuery}`}>
+    // default start and end for pagination
+    <form method='post' action={`http://localhost:3000/search?query=${searchQuery}&start=0&end=20`}>
       <label className='search-label' htmlFor='searchbar'>Search</label>
       <span className='searchbar'>
         <input className='search-input' 
