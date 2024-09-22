@@ -335,9 +335,6 @@ input {
 
 .pagination-wrap {
   margin: 0 auto;
-  width: fit-content;
-  background: var(--color2);
-  border: var(--border);
 }
 
 .pagination {
@@ -351,4 +348,29 @@ input {
 
 .pagination * svg {
   height: 15px;
+}
+
+.pagination * .btn {
+  gap: 1rem;
+}
+
+.error-msg {
+  position: absolute;
+  top: 135px;
+  left: 50%;
+  opacity: 0;
+  transform: translateX(-50%);
+  background: #df3939;
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  transition: all 200ms ease-in-out;
+}
+
+.filter-dropdown {
+  padding: .6rem;
+  margin-left: 1rem;
+  background: var(--color2);
+  border: var(--border);
+  color: white;
 }
