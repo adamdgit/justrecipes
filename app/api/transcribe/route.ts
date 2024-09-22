@@ -1,7 +1,7 @@
-import { NextResponse, type NextRequest } from 'next/server'
-import { YoutubeTranscript } from "youtube-transcript";
+import { type NextRequest } from 'next/server'
+import { YoutubeTranscript, YoutubeTranscriptError } from "youtube-transcript";
 import OpenAI from "openai";
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { isValidURL } from '@/utils/isValidURL';
 import { getIDfromURL } from '@/utils/getIDfromURL';
 import { createClient } from '@/utils/supabase/server';
@@ -22,10 +22,10 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
   // If video ID has already been transcribed return an error, frontend can link to the video
   const supabase = createClient();
   const { data, error } = await supabase.from("recipes")
-    .select("shorts_url")
-    .eq("shorts_url", URL_ID)
+    .select("video_id")
+    .eq("video_id", URL_ID)
   
-  if (data && data[0]?.shorts_url === URL_ID) {
+  if (data && data[0]?.video_id === URL_ID) {
     return new Response(URL_ID, { statusText: "Transcription for video already exists", status: 409 });
   }
 
@@ -45,8 +45,7 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
         }
     });
   } catch(error) {
-    console.log(error)
-    return new Response(null, { statusText: "Sorry, transcript was not available for this video", status: 400 });
+    return new Response(null, { statusText: "Could not find transcript for video", status: 400 });
   }
 }
 
