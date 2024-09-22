@@ -17,7 +17,9 @@ export default function RootLayout({
       <body>
       <Header />
         <main className="main-content">
-          {children}
+          <div className='content-wrap'>
+            {children}
+          </div>
         </main>
       </body>
     </html>
