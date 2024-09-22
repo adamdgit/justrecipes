@@ -45,16 +45,20 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
   const newRating = (rating * rating_count + Number(user_rating)) / newRatingCount;
   const roundedRating = Math.round(newRating * 2) / 2;
 
-  const { error: updateError } = await supabase.from('recipes')
+  const { data: updatedRating, error: updateError } = await supabase.from('recipes')
     .update({
       rating: roundedRating,
       rating_count: newRatingCount,
     })
     .eq('id', recipe_ID)
+    .select();
 
   if (updateError) {
     return new Response(null, { statusText: updateError.message, status: 401 });
   } 
 
-  return new Response(null, { statusText: "Rating updated successfully", status: 200 });
+  // return new count and rating from db
+  return new Response(JSON.stringify(
+    { rating: updatedRating[0].rating, count: updatedRating[0].rating_count }), 
+    { statusText: "Rating updated successfully", status: 200 });
 }
