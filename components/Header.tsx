@@ -15,7 +15,7 @@ export default async function Header() {
         : {'gridTemplateColumns': 'auto minmax(200px, 450px) auto'}
       }>
         <a href="/" className="brand-text">
-          <span className="brand1">just</span> <span className="brand2">recipes</span>
+          easy<span className="brand2">recipes</span>
         </a>
         <SearchBar />
         {user ? 
