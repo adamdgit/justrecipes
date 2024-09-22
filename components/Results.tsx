@@ -7,7 +7,11 @@ type ResultsProps = {
   data: Recipe[] | null;
 };
 
-export default async function Results({ data } : ResultsProps) {
+export default function Results({ data } : ResultsProps) {
+
+  if (data?.length === 0) return (
+    <p>You have no saved recipes</p>
+  )
 
   return (
     <div className='results-list'>
