@@ -1,5 +1,6 @@
 import Results from '@/components/Results';
 import { createClient } from '@/utils/supabase/server';
+import React from 'react';
 
 export default async function Page() {
 
@@ -11,13 +12,13 @@ export default async function Page() {
     .limit(20);
       
   return (
-    <div className='content-wrap'>  
+    <React.Fragment>  
       <h1>Top Recipes</h1>
 
       {error 
         ? <span className='supabase-error'>Something went wrong</span>
         : <Results data={recipes} />
       }
-    </div>
+    </React.Fragment>
   );
 }
