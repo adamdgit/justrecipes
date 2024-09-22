@@ -10,12 +10,22 @@ export default async function Recipe({ id }: { id: string }){
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
+  // get recipe by id
   const { data: recipe, error } = await supabase.from("recipes")
-    .select("*")
+    .select(`*,
+        recipe_categories (category_id)
+      `)
     .eq('id', Number(id))
     .single();
 
   if (error) return <ErrorMessage msg={"Error fetching recipe info"} />
+
+  // get related categories
+  const { data: categories, error: categoryError } = await supabase.from("categories")
+    .select('name')
+    .in('id', recipe?.recipe_categories.map(x => x.category_id));
+
+  if (categoryError) return <ErrorMessage msg={"Error fetching recipe info"} />
 
   let isSaved = false;
   let userRating = 0;
@@ -65,7 +75,13 @@ export default async function Recipe({ id }: { id: string }){
             {recipe.cooking_time}
           </span>
           <span>{recipe.description}</span>
+
           <span>Categories: </span>
+          <ul className='categories-list'>
+            {categories?.map(cat => {
+              return <li key={cat.name}>{cat.name}</li>
+            })}
+          </ul>
 
           <span className='heading-small'>Ingredients: </span>
           <ul className='ingredients-list'>
