@@ -2,6 +2,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import Results from '@/components/Results';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import React from 'react';
 
 export default async function page() {
   const supabase = createClient();
@@ -21,13 +22,14 @@ export default async function page() {
     
   const savedRecipes = data ? data.flatMap(x => x.recipes ? [x.recipes] : []) : null;
 
+  if (error) return (
+    <ErrorMessage msg={"Error retrieving saved recipes"} />
+  )
+
   return (
-    <div className='content-wrap'>
+    <React.Fragment>
       <h1>Saved Recipes</h1>
-      {error 
-        ? <ErrorMessage msg={"Error retrieving saved recipes"} />
-        : <Results data={savedRecipes} />
-      }
-    </div>
+     <Results data={savedRecipes} />
+    </React.Fragment>
   )
 }
