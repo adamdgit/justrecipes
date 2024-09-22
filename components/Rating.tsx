@@ -14,17 +14,22 @@ type Props = {
   recipe_id: number
 }
 
+const calcFullStars = (x: number) => Math.floor(x);
+const calcHalfStars = (x: number) => (x % 1 >= 0.5) ? 1 : 0;
+
 export default function Rating({ user_id, rating, user_rating, count, recipe_id } : Props) {
   // calculate how many of each star exists, to then map over
-  const fullStars = Math.floor(rating);
-  const halfStars = (rating % 1 >= 0.5) ? 1 : 0;
-  const emptyStars = 5 - fullStars - halfStars;
+  const [fullStars, setFullStars] = useState(calcFullStars(rating));
+  const [halfStars, setHalfStars] = useState(calcHalfStars(rating));
+  const [emptyStars, setEmptyStars] = useState(5 - fullStars - halfStars);
 
+  const [ratingCcount, setCount] = useState(count);
   const [showModal, setShowModal] = useState(false);
   const [userRating, setUserRating] = useState(0);
+  const [existingRating, setExistingRating] = useState(user_rating);
 
   async function handleUserRating(num: number) {
-    if (!user_id || user_rating > 0) return
+    if (!user_id || existingRating > 0) return
 
     const response = await fetch(
       `http://localhost:3000/api/recipe/rate?userid=${user_id}&rating=${num}&recipeid=${recipe_id}`,
@@ -34,7 +39,17 @@ export default function Rating({ user_id, rating, user_rating, count, recipe_id 
     if (!response.ok) {
       // TODO update rating state, user has rated
     } else {
+      // calculate new rating to display update to user
+      const data = await response.json();
+      let a = calcFullStars(data.rating);
+      let b = calcHalfStars(data.rating);
+      let c = 5 - a - b;
 
+      setCount(data.count);
+      setFullStars(a);
+      setHalfStars(b);
+      setEmptyStars(c);
+      setExistingRating(userRating);
     }
   }
 
@@ -53,7 +68,7 @@ export default function Rating({ user_id, rating, user_rating, count, recipe_id 
             <FontAwesomeIcon key={i} icon={starOutline} />
           ))}
         </div>
-        {user_id ? <span>{count} votes</span> : null}
+        {user_id ? <span>{ratingCcount} votes</span> : null}
 
         {user_id ? 
           <button className='btn' onClick={() => setShowModal(!showModal)}>
@@ -62,7 +77,7 @@ export default function Rating({ user_id, rating, user_rating, count, recipe_id 
         : null}
       </div>
 
-      {showModal && !user_rating ? <div className='rating-modal'>
+      {showModal && !existingRating ? <div className='rating-modal'>
         Give a rating:
         <div>
           {Array(5).fill(0).map((_, i) => (
@@ -86,8 +101,8 @@ export default function Rating({ user_id, rating, user_rating, count, recipe_id 
             key={i} 
             width={20}
             height={20}
-            icon={user_rating >= (i +1) ? starSOlid : starOutline} 
-            style={user_rating >= (i +1) ? {color: "var(--color1)", cursor: 'pointer'} : {cursor: 'pointer'}}
+            icon={existingRating >= (i +1) ? starSOlid : starOutline} 
+            style={existingRating >= (i +1) ? {color: "var(--color1)", cursor: 'pointer'} : {cursor: 'pointer'}}
           />
         ))}
       </div>
