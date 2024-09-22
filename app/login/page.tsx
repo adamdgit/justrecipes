@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
+import React from "react";
 
 export default function Login({
   searchParams,
@@ -52,7 +53,7 @@ export default function Login({
   };
 
   return (
-    <div className="content-wrap">
+    <React.Fragment>
       <Link href="/" className="btn back-btn">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -111,6 +112,6 @@ export default function Login({
           </p>
         )}
       </form>
-    </div>
+    </React.Fragment>
   );
 }
