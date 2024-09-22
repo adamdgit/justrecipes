@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { parse, Allow } from "partial-json";
 import type { ErrorMsg, AssistantResponse } from "@/types/main";
 import ErrorMessage from "./ErrorMessage";
+import { useRouter } from "next/navigation";
 
 export default function Transcribe() {
   const [url, setUrl] = useState("");
@@ -11,9 +12,8 @@ export default function Transcribe() {
   const [streamedData, setStreamedData] = useState<AssistantResponse>();
   const [errorMsg, setErrorMsg] = useState<ErrorMsg>({msg: null, status: null});
   const [streamingIsDone, setStreamingIsDone] = useState(false);
-
-  const [saved, setSaved] = useState(false);
-  const [savedID, setSavedID] = useState();
+  const [needsUpdate, setNeedsUpdate] = useState(false);
+  const router = useRouter();
 
   async function handleStreaming(reader: ReadableStreamDefaultReader<Uint8Array>, decoder: TextDecoder) {
     let tmp = ''
@@ -29,6 +29,7 @@ export default function Transcribe() {
 
       // transcript is availalbe, but video is not a recipe
       if (parsedJSON?.success === false) {
+        setNeedsUpdate(true);
         setErrorMsg({status: 400, msg: "No recipe found in video"});
         return
       }
@@ -39,11 +40,10 @@ export default function Transcribe() {
 
   async function fetchRecipeTranscription() {
     // reset state each run
-    setSaved(false);
-    setSavedID(undefined);
     setLoading(true);
     setStreamingIsDone(false);
     setErrorMsg({msg: null, status: null});
+    setNeedsUpdate(false);
     
     const response = await fetch(`http://localhost:3000/api/transcribe?url=${url}`, {
       method: "POST",
@@ -60,6 +60,7 @@ export default function Transcribe() {
       setStreamingIsDone(true);
     } else {
       setLoading(false);
+      setNeedsUpdate(true);
       setErrorMsg({msg: response.statusText, status: response.status});
     }
   }
@@ -74,14 +75,14 @@ export default function Transcribe() {
     });
 
     if (!response.ok) {
-      // handle error
+      setNeedsUpdate(true)
+      setErrorMsg({status: 400, msg: "Error creating recipe"});
+      return
     }
 
-    // if successful get newly created items ID
-    setSaved(true);
+    // if success, redirect to newly created item route
     const res = await response.json();
-    setSavedID(res.item_id);
-
+    router.push(`${origin}/recipes/${res.item_id}`)
   }
 
   return (
@@ -98,9 +99,9 @@ export default function Transcribe() {
 
       {loading && <p>Connecting to AI assistant..</p>}
 
-      {errorMsg.status ?  
-        <ErrorMessage msg={errorMsg?.msg} />
-      : streamedData?.recipe && !saved &&
+      {needsUpdate ?  
+        <ErrorMessage msg={errorMsg?.msg} needsUpdate={needsUpdate} />
+      : streamedData?.recipe &&
         <div className={"streamed-content"}>
           <h3>Name: {streamedData?.recipe.name}</h3>
           <p><strong>Description: </strong> {streamedData?.recipe.description}</p>
@@ -122,15 +123,6 @@ export default function Transcribe() {
             <button onClick={() => createRecipe()} className="btn" style={{justifySelf: "center"}}>Save Recipe</button> 
           : null}
         </div>}
-
-        {/* TODO CLEAN UP THIS SECTION */}
-        {saved ? 
-          <div style={{"display": "flex", "gap" : "1rem"}}>
-            <p>Recipe has been saved, view it here: </p>
-            <a href={`http://localhost:3000/recipes/${savedID}`} className="">View Created Item</a>
-          </div>
-        : null}
-
     </React.Fragment>
   )
 }
