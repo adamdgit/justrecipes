@@ -369,8 +369,13 @@ input {
 
 .filter-dropdown {
   padding: .6rem;
-  margin-left: 1rem;
   background: var(--color2);
   border: var(--border);
   color: white;
+}
+
+.filters-wrap {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
