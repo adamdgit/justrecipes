@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Results from './Results'
 import { Database } from '@/types/supabase';
 
@@ -18,31 +18,60 @@ type Props = {
 }
 
 export default function SearchFilter({ data, categories } : Props) {
-  const [recipes, setRecipes] = useState(data);
+  const [recipes] = useState(data);
   const [filteredRecipes, setFilteredRecipes] = useState(data);
+  const [category, setCategory] = useState("");
+  const [rating, setRating] = useState("descending");
 
-  // returns recipes which are the same category as selected from dropdown
-  const filterCategories = (category: string) => {
-    const filtered = recipes.filter(x => {
+  useEffect(() => {
+    applyFilter();
+  },[category, rating])
+
+  // apply each filter in order
+  const applyFilter = () => {
+    // if no category filter, return all recipes
+    const filter1 = category === "" ? recipes : [...recipes].filter(x => {
       return x.recipe_categories.some(cat => cat.category_id === Number(category))
     });
-    setFilteredRecipes(filtered)
-  }
 
+    const filter2 = rating === "" ? filter1 : [...filter1].sort((a, b) => {
+      if (!a.rating) a.rating = 0
+      if (!b.rating) b.rating = 0
+      return rating === "ascending" ? a.rating - b.rating : b.rating - a.rating;
+    });
+
+    setFilteredRecipes(filter2);
+  }
   
   return (
-    <div> 
-      <label htmlFor='categories'>Filter by category: </label>
-      <select 
-        className='filter-dropdown'
-        name='categories' 
-        onChange={(e) => filterCategories(e.currentTarget.value)}>
-        {categories && categories.map(cat => {
-          return <option key={cat.id} value={cat.id}>{cat.name ?? ""}</option>
-        })}
-      </select>
+    <React.Fragment> 
+      <h3>Filters</h3>
+      <div className='filters-wrap'>
+        <label htmlFor='categories'>Category: </label>
+        <select 
+          className='filter-dropdown'
+          name='categories' 
+          onChange={(e) => setCategory(e.currentTarget.value)}
+        >
+          <option value={""} selected>- Default</option>
+          {categories && categories.map(cat => {
+            return <option key={cat.id} value={cat.id}>{cat.name ?? ""}</option>
+          })}
+        </select>
+
+        <label htmlFor='ratings'>Rating: </label>
+        <select 
+          className='filter-dropdown'
+          name='ratings' 
+          onChange={(e) => setRating(e.currentTarget.value)}
+        >
+          <option value={""} selected>- Default</option>
+          <option value={"ascending"}>Low - High</option>
+          <option value={"descending"}>High - Low</option>
+        </select>
+      </div>
 
       {filteredRecipes && <Results data={filteredRecipes} />}
-    </div>
+    </React.Fragment>
   )
 }
