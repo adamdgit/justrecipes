@@ -14,7 +14,8 @@ export default async function page({ params, searchParams,}:
   let start = Number(searchParams?.start) ?? 0;
   let end;
 
-  // ensure end range is always +20 of the start
+  // ensure start and end ranges are valid
+  if (Number.isNaN(start)) start = 0;
   let remainder = start % 20;
   if (remainder !== 0) start -= remainder; // start will always be multiple of 20
   end = start + 20;
@@ -40,7 +41,7 @@ export default async function page({ params, searchParams,}:
 
   return (
     <React.Fragment>
-      <h1>Search Results:</h1>
+      <h1>Search for Recipes</h1>
       <SearchFilter 
         data={recipes} 
         categories={categories} 
