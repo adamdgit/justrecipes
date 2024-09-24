@@ -34,6 +34,7 @@ export default function SearchFilter({ data, categories } : Props) {
       return x.recipe_categories.some(cat => cat.category_id === Number(category))
     });
 
+    // if no rating filter, return filter1
     const filter2 = rating === "" ? filter1 : [...filter1].sort((a, b) => {
       if (!a.rating) a.rating = 0
       if (!b.rating) b.rating = 0
