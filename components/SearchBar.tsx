@@ -15,19 +15,17 @@ export default function SearchBar() {
 
   return (
     // default start and end for pagination
-    <form method='post' action={`http://localhost:3000/search?query=${searchQuery}&start=0&end=20`}>
-      <label className='search-label' htmlFor='searchbar'>Search</label>
       <span className='searchbar'>
+        <label className='search-label' htmlFor='searchbar'>Search</label>
         <input className='search-input' 
           placeholder='search existing recipes'
           defaultValue={query ?? ''}
           name='searchbar' 
           type='search' 
           onChange={(e) => setSearchQuery(e.target.value)} />
-        <button className='search-btn' type='submit'>
+        <a href={`http://localhost:3000/search?query=${searchQuery}&start=0&end=20`} className='search-btn' type='submit'>
           <FontAwesomeIcon icon={faSearch} style={{width: '20px'}} />
-        </button>
+        </a>
       </span>
-    </form>
   )
 }
