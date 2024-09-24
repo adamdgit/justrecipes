@@ -2,9 +2,9 @@ import React from 'react'
 
 export default function Navbar() {
   return (
-    <nav className='navbar'>
+    <React.Fragment>
       <a href='/create' className="btn">Create Recipe</a> 
       <a href='/saved' className="btn">Saved Recipes</a> 
-    </nav>
+    </React.Fragment>
   )
 }
