@@ -1,28 +1,30 @@
-import { createClient } from "@/utils/supabase/server";
+'use client'
+
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import Navbar from "./Navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { User } from "@supabase/supabase-js";
+import { useState } from "react";
 
-export default async function AuthButton() {
-  const supabase = createClient();
+export default function AuthButton({ user }: { user: User | null }) {
 
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const signOut = async () => {
-    "use server";
-
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    return redirect("/login");
-  };
+  const [show, setShow] = useState(false);
 
   return user ? (
-    <div className="user-wrapper">
+    <div className="user-nav-wrap">
       {user.email}
-      <form action={signOut}>
-        <button className="btn logout">
+
+      <FontAwesomeIcon icon={faBars} 
+        className="dropdown-menu btn" 
+        onClick={() => setShow(!show)} 
+      />
+      <div className={show ? "menu-items show" : "menu-items hide"}>
+        <Navbar />
+        <a href="http://localhost:3000/auth/signout" className="btn logout">
           Logout
-        </button>
-      </form>
+        </a>
+      </div>
     </div>
   ) : (
     <Link
