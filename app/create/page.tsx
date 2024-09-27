@@ -13,10 +13,10 @@ export default async function ProtectedPage() {
   }
 
   return (
-    <React.Fragment>
+    <div className='content-wrap'>
       <h1>Generate a recipe from video using AI</h1>
       <Helper />
       <Transcribe />
-    </React.Fragment>
+    </div>
   );
 }
