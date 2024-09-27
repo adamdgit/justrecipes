@@ -1,5 +1,5 @@
 import { type NextRequest } from 'next/server'
-import { YoutubeTranscript, YoutubeTranscriptError } from "youtube-transcript";
+import { YoutubeTranscript } from "youtube-transcript";
 import OpenAI from "openai";
 import { NextApiResponse } from 'next';
 import { isValidURL } from '@/utils/isValidURL';
