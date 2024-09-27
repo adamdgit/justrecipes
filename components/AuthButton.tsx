@@ -5,11 +5,23 @@ import Navbar from "./Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { User } from "@supabase/supabase-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AuthButton({ user }: { user: User | null }) {
 
   const [show, setShow] = useState(false);
+
+  // onclick outside of dropdown, close dropdown
+  useEffect(() => {
+    document.addEventListener("click", (e) => {
+      if (e.target instanceof Element) {
+        if (!e.target.classList.contains('dropdown-menu') && 
+            !e.target.classList.contains('menu-items')) {
+          setShow(false)
+        }
+      }
+    })
+  },[])
 
   return user ? (
     <div className="user-nav-wrap">
@@ -17,14 +29,14 @@ export default function AuthButton({ user }: { user: User | null }) {
 
       <FontAwesomeIcon icon={faBars} 
         className="dropdown-menu btn" 
-        onClick={() => setShow(!show)} 
+        onClick={() => setShow(!show)}
       />
-      <div className={show ? "menu-items show" : "menu-items hide"}>
+      <nav className={show ? "menu-items show" : "menu-items hide"}>
         <Navbar />
         <a href="http://localhost:3000/auth/signout" className="btn logout">
           Logout
         </a>
-      </div>
+      </nav>
     </div>
   ) : (
     <Link
