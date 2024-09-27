@@ -3,8 +3,8 @@ import Header from "@/components/Header";
 
 export const metadata = {
   metadataBase: new URL('http://localhost:3000'),
-  title: "Cooking recipes without the nonsense, just recipes.",
-  description: "The quickest way to learn a new recipe.",
+  title: "Generate recipes from Youtube videos using AI",
+  description: "Quick and easy recipes, watch cooking videos with your recipe, generate recipes from video using AI.",
 };
 
 export default function RootLayout({
@@ -17,9 +17,7 @@ export default function RootLayout({
       <body>
       <Header />
         <main className="main-content">
-          <div className='content-wrap'>
-            {children}
-          </div>
+          {children}
         </main>
       </body>
     </html>
