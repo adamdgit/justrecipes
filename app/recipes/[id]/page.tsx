@@ -4,8 +4,8 @@ import React from "react";
 export default function Page({ params }: { params: { id: string } }) {
 
   return (
-    <Recipe 
-      id={params.id}
-    />
+    <div className='content-wrap'>
+      <Recipe id={params.id} />
+    </div>
   )
 }

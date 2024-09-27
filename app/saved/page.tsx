@@ -25,9 +25,9 @@ export default async function page() {
   )
 
   return (
-    <React.Fragment>
+    <div className='content-wrap'>
       <h1>Saved Recipes</h1>
      {savedRecipes?.length > 0 ? <Results data={savedRecipes} /> :<p>No saved recipes</p>}
-    </React.Fragment>
+    </div>
   )
 }

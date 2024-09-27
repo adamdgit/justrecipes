@@ -1,6 +1,7 @@
 import ErrorMessage from '@/components/ErrorMessage';
 import Pagination from '@/components/Pagination';
 import SearchFilter from '@/components/SearchFilter';
+import { CalcStartAndEnd } from '@/utils/calcStartAndEnd';
 import { createClient } from '@/utils/supabase/server';
 import React from 'react';
 
@@ -11,14 +12,7 @@ export default async function page({ params, searchParams,}:
 }) {
 
   const query = searchParams?.query as string;
-  let start = Number(searchParams?.start) ?? 0;
-  let end;
-
-  // ensure start and end ranges are valid
-  if (Number.isNaN(start)) start = 0;
-  let remainder = start % 20;
-  if (remainder !== 0) start -= remainder; // start will always be multiple of 20
-  end = start + 20;
+  const [start, end] = CalcStartAndEnd(searchParams?.start)
 
   const supabase = createClient();
   const { data: recipes, error } = await supabase.from("recipes")
@@ -40,7 +34,7 @@ export default async function page({ params, searchParams,}:
   )
 
   return (
-    <React.Fragment>
+    <div className='content-wrap'>
       <h1>Search for Recipes</h1>
       <SearchFilter 
         data={recipes} 
@@ -50,6 +44,6 @@ export default async function page({ params, searchParams,}:
         start={start} 
         searchQuery={query} 
       />
-    </React.Fragment>
+    </div>
   )
 }

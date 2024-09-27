@@ -53,7 +53,7 @@ export default function Login({
   };
 
   return (
-    <React.Fragment>
+    <div className='content-wrap'>
       <Link href="/" className="btn back-btn">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -107,11 +107,11 @@ export default function Login({
           Sign Up
         </SubmitButton>
         {searchParams?.message && (
-          <p className="">
+          <p className="auth-error">
             {searchParams.message}
           </p>
         )}
       </form>
-    </React.Fragment>
+    </div>
   );
 }
