@@ -54,7 +54,7 @@ export default function SearchFilter({ data, categories } : Props) {
           name='categories' 
           onChange={(e) => setCategory(e.currentTarget.value)}
         >
-          <option value={""} selected>- Default</option>
+          <option value={""} defaultValue={""}>- Default</option>
           {categories && categories.map(cat => {
             return <option key={cat.id} value={cat.id}>{cat.name ?? ""}</option>
           })}
@@ -66,7 +66,7 @@ export default function SearchFilter({ data, categories } : Props) {
           name='ratings' 
           onChange={(e) => setRating(e.currentTarget.value)}
         >
-          <option value={""} selected>- Default</option>
+          <option value={""} defaultValue={""}>- Default</option>
           <option value={"ascending"}>Low - High</option>
           <option value={"descending"}>High - Low</option>
         </select>
