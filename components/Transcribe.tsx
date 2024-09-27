@@ -5,6 +5,7 @@ import { parse, Allow } from "partial-json";
 import type { ErrorMsg, AssistantResponse } from "@/types/main";
 import ErrorMessage from "./ErrorMessage";
 import { useRouter } from "next/navigation";
+import Loading from "./Loading";
 
 export default function Transcribe() {
   const [url, setUrl] = useState("");
@@ -97,7 +98,7 @@ export default function Transcribe() {
         <button className="btn" onClick={() => fetchRecipeTranscription()}>Generate</button>
       </div>
 
-      {loading && <p>Connecting to AI assistant..</p>}
+      {loading && <Loading message="AI is analysing your video"/>}
 
       {needsUpdate ?  
         <ErrorMessage msg={errorMsg?.msg} needsUpdate={needsUpdate} />
