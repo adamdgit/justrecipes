@@ -1,1 +1,1 @@
-export const ADDRESS = "https://justrecipes-ten.vercel.app/"
+export const ADDRESS = "https://justrecipes-ten.vercel.app"
