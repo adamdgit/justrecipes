@@ -32,6 +32,7 @@ export default function Pagination({ start, searchQuery }: Props) {
           Back
          </a>
         </li>
+        <span>{start} - {start + 20}</span>
         <li>
           <a className='btn'
             href={ `${ADDRESS}/search?query=${searchQuery}&start=${startIndex}`}
