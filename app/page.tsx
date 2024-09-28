@@ -1,4 +1,4 @@
-import { faFileImport, faFloppyDisk, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faFileImport, faHeart, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
@@ -15,8 +15,10 @@ export default async function Page() {
         </p>
         
         <p>
-          Sign up now to access these features:
+          Login with the test account here:
         </p>
+        <a href='/login' className='btn'>Login</a>
+
         <ul className='features-list'> 
           <li>
             <span>Convert videos to recipes</span>
@@ -24,16 +26,13 @@ export default async function Page() {
           </li>
           <li>
             <span>Save your favourite recipes</span>
-            <FontAwesomeIcon icon={faFloppyDisk} />
+            <FontAwesomeIcon icon={faHeart} />
           </li>
           <li>
             <span>Give a recipe rating</span>
             <FontAwesomeIcon icon={faStar} />
           </li>
         </ul>
-
-
-        <a href='/login' className='btn'>Create Account</a>
 
         <p>
           Anyone can browse recipes without an account.
