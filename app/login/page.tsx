@@ -73,6 +73,7 @@ export default function Login({
       </Link>
 
       <h1>SignIn</h1>
+      <p>Feel free to try the app with the test account: test@test.com, password</p>
 
       <form className="login-form">
           <label htmlFor="email">
@@ -100,7 +101,7 @@ export default function Login({
         >
           Sign In
         </SubmitButton>
-        
+
         {searchParams?.message && (
           <p className="auth-error">
             {searchParams.message}
