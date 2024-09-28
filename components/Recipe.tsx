@@ -18,14 +18,14 @@ export default async function Recipe({ id }: { id: string }){
     .eq('id', Number(id))
     .single();
 
-  if (error) return <ErrorMessage msg={"Error fetching recipe info"} />
+  if (error) return <ErrorMessage msg={"Error fetching recipe info"} needsUpdate={true} />
 
   // get related categories
   const { data: categories, error: categoryError } = await supabase.from("categories")
     .select('name')
     .in('id', recipe?.recipe_categories.map(x => x.category_id));
 
-  if (categoryError) return <ErrorMessage msg={"Error fetching recipe info"} />
+  if (categoryError) return <ErrorMessage msg={"Error fetching recipe info"} needsUpdate={true} />
 
   let isSaved = false;
   let userRating = 0;
@@ -36,6 +36,8 @@ export default async function Recipe({ id }: { id: string }){
       .eq('user_id', user.id)
       .eq('recipe_id', Number(id))
       .single();
+
+    if (savedError) return <ErrorMessage msg={"Error fetching saved recipes"} needsUpdate={true} />
 
     // if a result returns the recipe has been saved by user
     if (savedRecipe) {
@@ -48,6 +50,8 @@ export default async function Recipe({ id }: { id: string }){
       .eq('recipe_ID', Number(id))
       .single();
 
+    if (ratingError) return <ErrorMessage msg={"Error fetching ratings"} needsUpdate={true} />
+    
     if (savedRating) {
       userRating = savedRating.rating ?? 0;
     }

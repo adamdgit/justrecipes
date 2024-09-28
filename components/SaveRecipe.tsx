@@ -1,6 +1,7 @@
 'use client'
 
 import { ErrorMsg } from '@/types/main'
+import { ADDRESS } from '@/utils/address'
 import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
@@ -21,7 +22,7 @@ export default function SaveRecipe({ id, user_ID, isSaved }: Props) {
     setErrorMsg({msg: null, status: null})
 
     if (!userHasSaved) {
-      const response = await fetch(`http://localhost:3000/api/recipe/save?recipeid=${id}&userid=${user_ID}`,
+      const response = await fetch(`${ADDRESS}/api/recipe/save?recipeid=${id}&userid=${user_ID}`,
         {
           method: "POST"
         }
@@ -35,7 +36,7 @@ export default function SaveRecipe({ id, user_ID, isSaved }: Props) {
     }
 
     if (userHasSaved) {
-      const response = await fetch(`http://localhost:3000/api/recipe/unfollow?recipeid=${id}&userid=${user_ID}`,
+      const response = await fetch(`${ADDRESS}/api/recipe/unfollow?recipeid=${id}&userid=${user_ID}`,
         {
           method: "POST"
         }

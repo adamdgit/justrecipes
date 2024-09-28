@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import { ADDRESS } from "@/utils/address";
 
 export default function AuthButton({ user }: { user: User | null }) {
 
@@ -33,7 +34,7 @@ export default function AuthButton({ user }: { user: User | null }) {
       />
       <nav className={show ? "menu-items show" : "menu-items hide"}>
         <Navbar />
-        <a href="http://localhost:3000/auth/signout" className="btn logout">
+        <a href={`${ADDRESS}/auth/signout`} className="btn logout">
           Logout
         </a>
       </nav>
