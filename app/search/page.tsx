@@ -30,7 +30,7 @@ export default async function page({ params, searchParams,}:
     .select("*");
 
   if (categoryError) return (
-    <ErrorMessage msg={"Error fetching categories"} needsUpdate={true} />
+    console.log("Error fetching recipe categories")
   )
 
   return (
@@ -38,7 +38,7 @@ export default async function page({ params, searchParams,}:
       <h1>Search for Recipes</h1>
       <SearchFilter 
         data={recipes} 
-        categories={categories} 
+        categories={categoryError ? [] : categories} 
       />
       <Pagination 
         start={start} 

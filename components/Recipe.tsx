@@ -37,7 +37,9 @@ export default async function Recipe({ id }: { id: string }){
       .eq('recipe_id', Number(id))
       .single();
 
-    if (savedError) return <ErrorMessage msg={"Error fetching saved recipes"} needsUpdate={true} />
+    if (savedError) {
+      console.log('Error fetching saved recipes')
+    }
 
     // if a result returns the recipe has been saved by user
     if (savedRecipe) {
@@ -50,7 +52,9 @@ export default async function Recipe({ id }: { id: string }){
       .eq('recipe_ID', Number(id))
       .single();
 
-    if (ratingError) return <ErrorMessage msg={"Error fetching ratings"} needsUpdate={true} />
+    if (ratingError) {
+      console.log('Error fetching ratings')
+    }
     
     if (savedRating) {
       userRating = savedRating.rating ?? 0;
