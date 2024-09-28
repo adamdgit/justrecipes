@@ -5,7 +5,7 @@ export default function Helper() {
     <div className="helper">
       <span>
         <p><strong>Supports:</strong> Youtube videos and shorts</p>
-        <p>Simply copy and paste the youtube video URL using the share button</p>
+        <p>Simply copy and paste the youtube video URL into the box below</p>
       </span>
       <span>
         <img className='helper-img1' src="images/pic1.png" alt="share button instructions" />
