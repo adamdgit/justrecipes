@@ -5,7 +5,7 @@ import Results from './Results'
 import { Database } from '@/types/supabase';
 
 type Recipe = Database["public"]["Tables"]["recipes"]["Row"] & {
-  recipe_categories: { category_id: number; }[];
+  recipe_categories: { category_id: number | null; }[];
 };
 type Category = {
   created_at: string;

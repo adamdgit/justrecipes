@@ -11,7 +11,7 @@ export default async function Page() {
       <div className='home-info'>
         <p>
           Easy Recipes lets you browse a catalogue of recipes which have been generated 
-          by AI from Youtube videos. It only takes a few easy steps.
+          by AI from Youtube videos. Logged in users can generate recipes from videos.
         </p>
         
         <p>
