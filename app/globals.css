@@ -484,14 +484,11 @@ input {
   h2 { font-size: 1.4rem; }
   h3 { font-size: 1.2rem; }
   .header-wrap {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     justify-items: center;
     gap: 1rem;
-    padding: 1rem;
-  }
-  .user-nav-wrap {
-    grid-row: 3;
+    padding: 1rem 1rem 2rem 1rem;
   }
   .brand-text {
     grid-row: 1;
@@ -505,7 +502,9 @@ input {
   .helper {
     display: none;
   }
-
+  .user-nav-wrap {
+    grid-row: 1;
+  }
   .url-wrap {
     display: flex;
     flex-direction: column;
@@ -541,5 +540,8 @@ input {
   }
   .features-list svg {
     height: 50px;
+  }
+  .login-form {
+    justify-self: center;
   }
 }

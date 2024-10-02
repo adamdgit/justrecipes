@@ -1,6 +1,5 @@
 'use client'
 
-import { ADDRESS } from '@/utils/address';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
@@ -17,7 +16,7 @@ export default function Pagination({ start, searchQuery }: Props) {
 
   // if client manually alters the url, this updates url to correct values from server
   useEffect(() => {
-    router.push(`${ADDRESS}/search?query=${searchQuery}&start=${start}`)
+    router.push(`/search?query=${searchQuery}&start=${start}`)
   },[])
   
   return (
@@ -25,7 +24,7 @@ export default function Pagination({ start, searchQuery }: Props) {
       <ul className='pagination'>
         <li>
           <a className='btn'
-            href={ `${ADDRESS}/search?query=${searchQuery}&start=${startIndex}`}
+            href={ `/search?query=${searchQuery}&start=${startIndex}`}
             onClick={() => setStartIndex(startIndex - 20 < 0 ? 0 : startIndex - 20)}
           >
           <FontAwesomeIcon icon={faChevronLeft} />
@@ -35,7 +34,7 @@ export default function Pagination({ start, searchQuery }: Props) {
         <span>{start} - {start + 20}</span>
         <li>
           <a className='btn'
-            href={ `${ADDRESS}/search?query=${searchQuery}&start=${startIndex}`}
+            href={ `/search?query=${searchQuery}&start=${startIndex}`}
             onClick={() => setStartIndex(startIndex + 20)}
           >Next
             <FontAwesomeIcon icon={faChevronRight} />

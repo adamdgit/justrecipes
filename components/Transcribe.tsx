@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from "react";
-import { parse, Allow } from "partial-json";
+import { parse } from "partial-json";
 import type { ErrorMsg, AssistantResponse } from "@/types/main";
 import ErrorMessage from "./ErrorMessage";
 import { useRouter } from "next/navigation";
@@ -46,7 +46,7 @@ export default function Transcribe() {
     setErrorMsg({msg: null, status: null});
     setNeedsUpdate(false);
     
-    const response = await fetch(`http://localhost:3000/api/transcribe?url=${url}`, {
+    const response = await fetch(`/api/transcribe?url=${url}`, {
       method: "POST",
       headers: {
         'content-type': 'application/json'
@@ -67,7 +67,7 @@ export default function Transcribe() {
   }
 
   async function createRecipe() {
-    const response = await fetch(`http://localhost:3000/api/recipe/create`, {
+    const response = await fetch(`/api/recipe/create`, {
       method: "POST",
       headers: {
         'content-type': 'application/json'

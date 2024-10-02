@@ -1,7 +1,6 @@
 import { Database } from '@/types/supabase';
 import React from 'react'
 import Rating from './Rating';
-import { ADDRESS } from '@/utils/address';
 
 type Recipe = Database["public"]["Tables"]["recipes"]["Row"];
 type ResultsProps = {
@@ -13,7 +12,7 @@ export default function Results({ data } : ResultsProps) {
   return (
     <div className='results-list'>
     {data && data?.map(recipe => 
-      <a href={`${ADDRESS}/recipes/${recipe.id}`} 
+      <a href={`/recipes/${recipe.id}`} 
         key={recipe.id}
         className='result-link'>
         <img src={`https://img.youtube.com/vi/${recipe.video_id}/hqdefault.jpg` ?? ''} alt={recipe.name + ' preview image'} className='recipe-img' />

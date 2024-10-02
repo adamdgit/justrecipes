@@ -5,7 +5,6 @@ import { faStar as starOutline } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react';
 import React from 'react';
-import { ADDRESS } from '@/utils/address';
 
 type Props = {
   user_id: string | null,
@@ -33,7 +32,7 @@ export default function Rating({ user_id, rating, user_rating, count, recipe_id 
     if (!user_id || existingRating > 0) return
 
     const response = await fetch(
-      `${ADDRESS}/api/recipe/rate?userid=${user_id}&rating=${num}&recipeid=${recipe_id}`,
+      `/api/recipe/rate?userid=${user_id}&rating=${num}&recipeid=${recipe_id}`,
       { method: "POST" }
     );
 
