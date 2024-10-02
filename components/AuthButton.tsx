@@ -26,11 +26,12 @@ export default function AuthButton({ user }: { user: User | null }) {
   return user ? (
     <div className="user-nav-wrap">
       {user.email}
-
-      <FontAwesomeIcon icon={faBars} 
-        className="dropdown-menu btn" 
+      <button 
+        className="dropdown-menu btn"
         onClick={() => setShow(!show)}
-      />
+      >
+        <FontAwesomeIcon icon={faBars} />
+      </button>
       <nav className={show ? "menu-items show" : "menu-items hide"}>
         <Navbar />
         <a href={`/auth/signout`} className="btn logout">

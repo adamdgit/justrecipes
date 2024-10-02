@@ -431,11 +431,13 @@ input {
 }
 
 .dropdown-menu {
-  display: block;
-  width: 15px;
-  height: 15px;
   padding: .6rem;
   cursor: pointer;
+}
+.dropdown-menu svg {
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
 }
 
 .menu-items {
