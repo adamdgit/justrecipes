@@ -45,7 +45,7 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
         }
     });
   } catch(error) {
-    return new Response("YoutubeTranscript Error", { statusText: "Could not find transcript for video", status: 400 });
+    return new Response(JSON.stringify(error), { statusText: "Could not find transcript for video", status: 400 });
   }
 }
 
