@@ -29,24 +29,30 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
     return new Response(URL_ID, { statusText: "Transcription for video already exists", status: 409 });
   }
 
+  let transcript;
   try {
-    const transcript = await YoutubeTranscript.fetchTranscript(URL_ID);
-    // retuns only text values from transcript object
-    const formattedTranscript = transcript.map(obj => obj.text).join('');
-    console.log(formattedTranscript)
-
-    // result is a readable stream
-    const result = await createGPTAssistant(formattedTranscript);
-    // query is "hello" for /api/search?query=hello
-    return new Response(result, { 
-        headers: {
-          'Content-Type': 'text/plain',
-          'cache-control': 'no-cache'
-        }
-    });
+    transcript = await YoutubeTranscript.fetchTranscript(URL_ID);
   } catch(error) {
     return new Response(JSON.stringify(error), { statusText: "Could not find transcript for video", status: 400 });
   }
+
+  // retuns only text values from transcript object
+  const formattedTranscript = transcript.map(obj => obj.text).join('');
+
+  let result;
+  try {
+    // result is a readable stream
+    result = await createGPTAssistant(formattedTranscript);
+  } catch(err) {
+    return new Response(JSON.stringify(error), { statusText: "Streaming error", status: 400 });
+  }
+
+  return new Response(result, { 
+      headers: {
+        'Content-Type': 'text/plain',
+        'cache-control': 'no-cache',
+      }
+  });
 }
 
 
