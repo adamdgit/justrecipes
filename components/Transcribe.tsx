@@ -6,8 +6,11 @@ import type { ErrorMsg, AssistantResponse } from "@/types/main";
 import ErrorMessage from "./ErrorMessage";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
+// fix for streaming issue deploy on vercel
+import { unstable_noStore as noStore } from 'next/cache';
 
 export default function Transcribe() {
+  noStore();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [streamedData, setStreamedData] = useState<AssistantResponse>();
