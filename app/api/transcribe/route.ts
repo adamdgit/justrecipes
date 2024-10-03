@@ -6,9 +6,6 @@ import { isValidURL } from '@/utils/isValidURL';
 import { getIDfromURL } from '@/utils/getIDfromURL';
 import { createClient } from '@/utils/supabase/server';
 
-// fix for streaming errors?
-export const dynamic = 'force-dynamic';
-
 export async function POST(request: NextRequest, res: NextApiResponse) {
   // get query string from url
   const searchParams = request.nextUrl.searchParams;
@@ -36,7 +33,7 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
   try {
     transcript = await YoutubeTranscript.fetchTranscript(URL_ID);
   } catch(error) {
-    return new Response(JSON.stringify(error), { statusText: "Could not find transcript for video", status: 400 });
+    return new Response("youtube error", { statusText: "Could not find transcript for video", status: 400 });
   }
 
   // retuns only text values from transcript object
@@ -47,7 +44,7 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
     // result is a readable stream
     result = await createGPTAssistant(formattedTranscript);
   } catch(err) {
-    return new Response(JSON.stringify(error), { statusText: "Streaming error", status: 400 });
+    return new Response("gpt error", { statusText: "Streaming error", status: 400 });
   }
 
   return new Response(result, { 
