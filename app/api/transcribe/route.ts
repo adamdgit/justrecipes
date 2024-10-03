@@ -6,6 +6,9 @@ import { isValidURL } from '@/utils/isValidURL';
 import { getIDfromURL } from '@/utils/getIDfromURL';
 import { createClient } from '@/utils/supabase/server';
 
+// fix for streaming errors?
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest, res: NextApiResponse) {
   // get query string from url
   const searchParams = request.nextUrl.searchParams;
