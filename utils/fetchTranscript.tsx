@@ -11,12 +11,15 @@ export async function fetchTranscript(id: string) {
     return { error: true, msg: "error fetching video data", data: null }
   }
 
-  console.error(response.body);
-  console.error(response)
+  const resText = await response.text();
+  console.error("resText: ", resText);
 
-  const captionsText = await response.text();
-  const html = captionsText.split('"captions":');
+  const html = resText.split('"captions":');
+  console.error("html: ", html);
+
   const captions = await JSON.parse(html[1].split(',"videoDetails')[0].replace('\n', ''));
+  console.error("captions: ", captions);
+
   const transcriptURL = captions.playerCaptionsTracklistRenderer.captionTracks[0].baseUrl as string;
 
   const transcriptResponse = await fetch(transcriptURL, {
