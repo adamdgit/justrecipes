@@ -4,7 +4,7 @@ export async function fetchTranscript(id: string) {
   const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36,gzip(gfe)'
   
   const response = await fetch(`https://www.youtube.com/watch?v=${id}`, {
-      headers: { 'User-Agent': USER_AGENT }
+      headers: { 'Accept-Language': "en-US", 'User-Agent': "Thunder Client (https://www.thunderclient.com)" }
   });
 
   if (!response.ok) {
@@ -12,16 +12,12 @@ export async function fetchTranscript(id: string) {
   }
 
   const resText = await response.text();
-  console.error("resText: ", resText);
-
+  console.error(resText)
   const html = resText.split('"captions":');
-  console.error("html: ", html);
-
   const captions = await JSON.parse(html[1].split(',"videoDetails')[0].replace('\n', ''));
-  console.error("captions: ", captions);
-
   const transcriptURL = captions.playerCaptionsTracklistRenderer.captionTracks[0].baseUrl as string;
 
+  console.log(transcriptURL)
   const transcriptResponse = await fetch(transcriptURL, {
       headers: { 'User-Agent': USER_AGENT }
   });
