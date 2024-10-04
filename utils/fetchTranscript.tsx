@@ -14,7 +14,6 @@ export async function fetchTranscript(id: string) {
   const html = captionsText.split('"captions":');
   const captions = await JSON.parse(html[1].split(',"videoDetails')[0].replace('\n', ''));
   const transcriptURL = captions.playerCaptionsTracklistRenderer.captionTracks[0].baseUrl as string;
-  console.log(transcriptURL)
 
   const transcriptResponse = await fetch(transcriptURL, {
       headers: { 'User-Agent': USER_AGENT }

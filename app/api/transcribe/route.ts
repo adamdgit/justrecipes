@@ -5,6 +5,7 @@ import { NextApiResponse } from 'next';
 import { isValidURL } from '@/utils/isValidURL';
 import { getIDfromURL } from '@/utils/getIDfromURL';
 import { createClient } from '@/utils/supabase/server';
+import { fetchTranscript } from '@/utils/fetchTranscript';
 
 export async function POST(request: NextRequest, res: NextApiResponse) {
   // get query string from url
@@ -29,20 +30,28 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
     return new Response(URL_ID, { statusText: "Transcription for video already exists", status: 409 });
   }
 
-  let transcript;
-  try {
-    transcript = await YoutubeTranscript.fetchTranscript(URL_ID);
-  } catch(error) {
-    return new Response("youtube error", { statusText: "Could not find transcript for video", status: 400 });
+  const {error: transcriptError, msg, data: transcriptData} = await fetchTranscript(URL_ID);
+
+  if (!transcriptData) { 
+    return new Response(URL_ID, { statusText: "Couldn't retrieve transcript", status: 400 }); 
   }
 
-  // retuns only text values from transcript object
-  const formattedTranscript = transcript.map(obj => obj.text).join('');
+  if (transcriptError) {
+    return new Response(URL_ID, { statusText: msg, status: 400 }); 
+  }
+  // let transcript;
+  // try {
+  //   transcript = await YoutubeTranscript.fetchTranscript(URL_ID);
+  // } catch(error) {
+  //   return new Response("youtube error", { statusText: "Could not find transcript for video", status: 400 });
+  // }
+  // // retuns only text values from transcript object
+  // const formattedTranscript = transcript.map(obj => obj.text).join('');
 
   let result;
   try {
     // result is a readable stream
-    result = await createGPTAssistant(formattedTranscript);
+    result = await createGPTAssistant(transcriptData);
   } catch(err) {
     return new Response("gpt error", { statusText: "Streaming error", status: 400 });
   }
