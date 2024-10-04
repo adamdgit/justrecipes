@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 
 type Props = {
-  msg: string | null,
+  msg: string | undefined,
   needsUpdate: boolean
 }
 
