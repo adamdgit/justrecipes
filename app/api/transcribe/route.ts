@@ -30,7 +30,7 @@ export async function POST(request: NextRequest, res: NextApiResponse) {
     return new Response(URL_ID, { statusText: "Transcription for video already exists", status: 409 });
   }
 
-  const {error: transcriptError, msg, data: transcriptData} = await fetchTranscript(URL_ID);
+  const { error: transcriptError, msg, data: transcriptData } = await fetchTranscript(URL_ID);
 
   if (!transcriptData) { 
     return new Response(URL_ID, { statusText: "Couldn't retrieve transcript", status: 400 }); 

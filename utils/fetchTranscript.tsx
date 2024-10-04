@@ -10,6 +10,9 @@ export async function fetchTranscript(id: string) {
     return { error: true, msg: "error fetching video data", data: null }
   }
 
+  console.error(await response.json());
+  throw new Error(await response.json());
+
   const captionsText = await response.text();
   const html = captionsText.split('"captions":');
   const captions = await JSON.parse(html[1].split(',"videoDetails')[0].replace('\n', ''));
