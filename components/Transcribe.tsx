@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { parse } from "partial-json";
-import type { ErrorMsg, AssistantResponse } from "@/types/main";
+import type { AssistantResponse } from "@/types/main";
 import ErrorMessage from "./ErrorMessage";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
@@ -11,7 +11,7 @@ export default function Transcribe() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [streamedData, setStreamedData] = useState<AssistantResponse>();
-  const [errorMsg, setErrorMsg] = useState<ErrorMsg>({msg: null, status: null});
+  const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
   const [streamingIsDone, setStreamingIsDone] = useState(false);
   const [needsUpdate, setNeedsUpdate] = useState(false);
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function Transcribe() {
       // transcript is availalbe, but video is not a recipe
       if (parsedJSON?.success === false) {
         setNeedsUpdate(true);
-        setErrorMsg({status: 400, msg: "No recipe found in video"});
+        setErrorMsg("No recipe found in video");
         return
       }
 
@@ -43,7 +43,7 @@ export default function Transcribe() {
     // reset state each run
     setLoading(true);
     setStreamingIsDone(false);
-    setErrorMsg({msg: null, status: null});
+    setErrorMsg(undefined);
     setNeedsUpdate(false);
     
     const response = await fetch(`/api/transcribe?url=${url}`, {
@@ -62,7 +62,7 @@ export default function Transcribe() {
     } else {
       setLoading(false);
       setNeedsUpdate(true);
-      setErrorMsg({msg: response.statusText, status: response.status});
+      setErrorMsg(response.statusText);
     }
   }
 
@@ -77,7 +77,7 @@ export default function Transcribe() {
 
     if (!response.ok) {
       setNeedsUpdate(true)
-      setErrorMsg({status: 400, msg: "Error creating recipe"});
+      setErrorMsg("Error creating recipe");
       return
     }
 
@@ -101,7 +101,7 @@ export default function Transcribe() {
       {loading && <Loading message="AI is analysing your video"/>}
 
       {needsUpdate ?  
-        <ErrorMessage msg={errorMsg?.msg} needsUpdate={needsUpdate} />
+        <ErrorMessage msg={errorMsg} needsUpdate={needsUpdate} />
       : streamedData?.recipe &&
         <div className={"streamed-content"}>
           <h3>Name: {streamedData?.recipe.name}</h3>
