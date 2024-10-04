@@ -1,3 +1,4 @@
+
 export async function fetchTranscript(id: string) {
   const RE_XML_TRANSCRIPT = /<text start="([^"]*)" dur="([^"]*)">([^<]*)<\/text>/g;
   const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36,gzip(gfe)'
@@ -10,10 +11,8 @@ export async function fetchTranscript(id: string) {
     return { error: true, msg: "error fetching video data", data: null }
   }
 
-  const data = await response.json();
-  const body = response.body
-  console.error(data, body);
-  throw new Error(data);
+  console.error(response.body);
+  console.error(response)
 
   const captionsText = await response.text();
   const html = captionsText.split('"captions":');
