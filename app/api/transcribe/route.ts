@@ -10,35 +10,34 @@ import { fetchTranscript } from '@/utils/fetchTranscript';
 export async function POST(request: NextRequest, res: NextApiResponse) {
   // get query string from url
   const searchParams = request.nextUrl.searchParams;
-  const url = searchParams.get('url') ?? "";
-  const language = searchParams.get('lang') ?? "en";
+  const transcriptData = searchParams.get('transcript') ?? "";
 
-  // handle invalid urls
-  if (!isValidURL(url)) {
-    return new Response(null, { statusText: "Invalid URL provided", status: 400 });
-  }
+  // // handle invalid urls
+  // if (!isValidURL(url)) {
+  //   return new Response(null, { statusText: "Invalid URL provided", status: 400 });
+  // }
 
-  const URL_ID = getIDfromURL(url);
+  // const URL_ID = getIDfromURL(url);
 
-  // If video ID has already been transcribed return an error, frontend can link to the video
-  const supabase = createClient();
-  const { data, error } = await supabase.from("recipes")
-    .select("video_id")
-    .eq("video_id", URL_ID)
+  // // If video ID has already been transcribed return an error, frontend can link to the video
+  // const supabase = createClient();
+  // const { data, error } = await supabase.from("recipes")
+  //   .select("video_id")
+  //   .eq("video_id", URL_ID)
   
-  if (data && data[0]?.video_id === URL_ID) {
-    return new Response(URL_ID, { statusText: "Transcription for video already exists", status: 409 });
-  }
+  // if (data && data[0]?.video_id === URL_ID) {
+  //   return new Response(URL_ID, { statusText: "Transcription for video already exists", status: 409 });
+  // }
 
-  const { error: transcriptError, msg, data: transcriptData } = await fetchTranscript(URL_ID);
+  // const { error: transcriptError, msg, data: transcriptData } = await fetchTranscript(URL_ID);
 
-  if (!transcriptData) { 
-    return new Response(URL_ID, { statusText: "Couldn't retrieve transcript", status: 400 }); 
-  }
+  // if (!transcriptData) { 
+  //   return new Response(URL_ID, { statusText: "Couldn't retrieve transcript", status: 400 }); 
+  // }
 
-  if (transcriptError) {
-    return new Response(URL_ID, { statusText: msg, status: 400 }); 
-  }
+  // if (transcriptError) {
+  //   return new Response(URL_ID, { statusText: msg, status: 400 }); 
+  // }
   // let transcript;
   // try {
   //   transcript = await YoutubeTranscript.fetchTranscript(URL_ID);

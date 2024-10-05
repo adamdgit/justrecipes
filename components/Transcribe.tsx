@@ -6,6 +6,9 @@ import type { AssistantResponse } from "@/types/main";
 import ErrorMessage from "./ErrorMessage";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
+import { isValidURL } from "@/utils/isValidURL";
+import { getIDfromURL } from "@/utils/getIDfromURL";
+import { fetchTranscript } from "@/utils/fetchTranscript";
 
 export default function Transcribe() {
   const [url, setUrl] = useState("");
@@ -45,8 +48,36 @@ export default function Transcribe() {
     setStreamingIsDone(false);
     setErrorMsg(undefined);
     setNeedsUpdate(false);
+
+    // handle invalid urls
+    if (!isValidURL(url)) {
+      setLoading(false);
+      setNeedsUpdate(true);
+      setErrorMsg("Invalid URL provided")
+      return
+    }
+
+    const URL_ID = getIDfromURL(url);
+    const res = await fetch(`/api/recipe/${URL_ID}`);
+    // if not okay, recipe already exists for this ID
+    if (!res.ok) {
+      setLoading(false);
+      setNeedsUpdate(true);
+      setErrorMsg(res.statusText)
+      return
+    }
+
+    const { error: transcriptError, msg, data: transcriptData } = await fetchTranscript(URL_ID);
+    // handling transcript api errors
+    if (!transcriptData || transcriptError) { 
+      setLoading(false);
+      setNeedsUpdate(true);
+      setErrorMsg(msg);
+      return
+    }
     
-    const response = await fetch(`/api/transcribe?url=${url}`, {
+    // send video transcript to the server
+    const response = await fetch(`/api/transcribe?transcript=${transcriptData}`, {
       method: "POST",
       headers: {
         'content-type': 'application/json'
