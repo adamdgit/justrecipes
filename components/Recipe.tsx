@@ -5,53 +5,32 @@ import { faClock } from '@fortawesome/free-solid-svg-icons';
 import Rating from './Rating';
 import SaveRecipe from './SaveRecipe';
 import ErrorMessage from './ErrorMessage';
+import { getRecipeByID, getUserRating, getUserHasSavedRecipe } from '@/utils/supabase/actions';
 
 export default async function Recipe({ id }: { id: string }){
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   // get recipe by id
-  const { data: recipe, error } = await supabase.from("recipes")
-    .select(`*,
-        recipe_categories (category_id)
-      `)
-    .eq('id', Number(id))
-    .single();
-
-  if (error) return <ErrorMessage msg={"Error fetching recipe info"} needsUpdate={true} />
-
-  // get related categories
-  const { data: categories, error: categoryError } = await supabase.from("categories")
-    .select('name')
-    .in('id', recipe?.recipe_categories.map(x => x.category_id));
-
-  if (categoryError) return <ErrorMessage msg={"Error fetching recipe info"} needsUpdate={true} />
+  const { recipe, categories, error } = await getRecipeByID(id);
+  if (error) return (
+    <ErrorMessage msg={"Error fetching recipe info"} needsUpdate={true} />
+  )
 
   let isSaved = false;
   let userRating = 0;
   // check if recipe is saved or not for user, if logged in
   if (user) {
-    const { data: savedRecipe, error: savedError } = await supabase.from('user_saved_recipes')
-      .select(`*`)
-      .eq('user_id', user.id)
-      .eq('recipe_id', Number(id))
-      .single();
-
+    const { savedRecipe, savedError } = await getUserHasSavedRecipe(user.id, id);
     if (savedError) {
       console.log('Error fetching saved recipes')
     }
-
     // if a result returns the recipe has been saved by user
     if (savedRecipe) {
       isSaved = true;
     }
 
-    const { data: savedRating, error: ratingError } = await supabase.from('ratings_tracking')
-      .select(`*`)
-      .eq('user_ID', user.id)
-      .eq('recipe_ID', Number(id))
-      .single();
-
+    const { savedRating, ratingError } = await getUserRating(user.id, id);
     if (ratingError) {
       console.log('Error fetching ratings')
     }
@@ -62,6 +41,7 @@ export default async function Recipe({ id }: { id: string }){
   }
 
   return (
+    recipe && 
     <React.Fragment>
       <div className='recipe-like'>
         <h2>{recipe.name}</h2>
@@ -107,7 +87,7 @@ export default async function Recipe({ id }: { id: string }){
         </div>
 
         <div className='recipe-right-half'>
-          <iframe width="320" height="640" src={`https://www.youtube.com/embed/${recipe?.video_id}` ?? 'no video found'} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          <iframe width="320" height="640" src={`https://www.youtube.com/embed/${recipe?.video_id}`} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
         </div>
       </div>
     </React.Fragment>

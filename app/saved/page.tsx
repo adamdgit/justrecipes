@@ -1,5 +1,6 @@
 import ErrorMessage from '@/components/ErrorMessage';
 import Results from '@/components/Results';
+import { getUsersSavedRecipes } from '@/utils/supabase/actions';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -12,14 +13,8 @@ export default async function page() {
     return redirect("/login");
   }
 
-  const { data, error } = await supabase.from('user_saved_recipes')
-  .select(`
-    recipes (*)
-  `)
-  .eq('user_id', user.id);
-    
+  const { data, error } = await getUsersSavedRecipes(user.id);
   const savedRecipes = data ? data.flatMap(x => x.recipes ? [x.recipes] : []) : [];
-
   if (error) return (
     <ErrorMessage msg={"Error retrieving saved recipes"} needsUpdate={true} />
   )
@@ -27,7 +22,11 @@ export default async function page() {
   return (
     <div className='content-wrap'>
       <h1>Saved Recipes</h1>
-     {savedRecipes?.length > 0 ? <Results data={savedRecipes} /> :<p>No saved recipes</p>}
+      {savedRecipes?.length > 0 ? 
+        <Results data={savedRecipes} />
+       : 
+        <p>No saved recipes</p>
+      }
     </div>
   )
 }
