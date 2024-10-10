@@ -5,6 +5,7 @@ export async function fetchTranscript(id: string) {
   
   const response = await fetch(`https://www.youtube.com/watch?v=${id}`, {
       headers: { 
+        'Access-Control-Allow-Origin': '*',
         'Accept' : 'application/json',
         'Accept-Language': "en-US", 
         'User-Agent': USER_AGENT 
