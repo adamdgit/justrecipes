@@ -7,7 +7,7 @@
  * // returns 'abc123'
  */
 export function getIDfromURL(url: string) {
-  let URL_ID;
+  let URL_ID = "";
 
   // shorts link
   if (url.includes("/shorts")) {
@@ -37,5 +37,5 @@ export function getIDfromURL(url: string) {
     return URL_ID;
   }
 
-  return URL_ID ?? "";
+  return URL_ID;
 }
